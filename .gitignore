@@ -104,3 +104,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+*.idea
+*migrations/
+*images/
