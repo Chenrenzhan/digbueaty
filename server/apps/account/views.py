@@ -32,11 +32,14 @@ def signup_action(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        User.objects.create(mail = email, uname = username, password = password, balance = 100000000)
-
+        user = User.objects.create(mail = email, uname = username, password = password, balance = 100000000)
+        print(user)
     print(email)
+    request.session['mail'] = user.mail;
+
     #跳转到首页
-    return render_to_response('index.html',context_instance=RequestContext(request))
+    return HttpResponseRedirect('/index/')
+    # return render_to_response('/index/',context_instance=RequestContext(request))
 
 #注册错误页面
 def signup_error(request):
@@ -56,7 +59,8 @@ def login_action(request):
     try:
         user = User.objects.get(mail = email)
         if(password == user.password):
-            return render_to_response('index.html', context_instance=RequestContext(request))
+            request.session['mail'] = user.mail
+            return HttpResponseRedirect('/index/')
         else:
             return HttpResponseRedirect('/account/login/error')
     except:

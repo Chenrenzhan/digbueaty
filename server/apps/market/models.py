@@ -3,6 +3,7 @@
 
 from django.db import models
 
+from PIL import ImageFile
 import store
 
 # Create your models here.
@@ -21,7 +22,12 @@ class Goods(models.Model):
     #已经下架
     is_sold_out = models.BooleanField(default=False)
     #价格
-    price = models.FloatField()
+    price = models.FloatField(default=6)
+    #商品种类,1-数码电子, 2-家电 , 3-服装, 4-生活, 5-书籍, 6-其他
+    goods_type = models.SmallIntegerField()
+
+    # class Meta:
+    #     abstract = True
 
     #获取所有主图
     def all_pic_set(self):
@@ -29,11 +35,19 @@ class Goods(models.Model):
 
 class PicSet(models.Model):
     #所属商品
-    commodity = models.ForeignKey(Goods)
+    goods = models.ForeignKey(Goods)
     #图片描述
-    alt = models.CharField(max_length = 128)
-    #url
-    url = models.URLField()
+    # alt = models.CharField(max_length = 128)
+    #图片地址
+    picUrl = models.ImageField(upload_to='images/items',blank=True,null=True)
+    # #url
+    # url = models.URLField()
+
+"""一口价商品"""
+class YiKouJiaItem(models.Model):
+    #商品
+    goods = models.ForeignKey(Goods)
+
 
 """竞拍商品"""
 class AuctionItem(models.Model):
@@ -49,8 +63,7 @@ class AuctionItem(models.Model):
     start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
     #结束时间
     end_time = models.DateTimeField(auto_now=False, auto_now_add=False)
-    #通知频率(秒)
-    inform_rate = models.IntegerField()
+
     #是否流拍
     def is_abortive(self):
         try:
@@ -121,6 +134,8 @@ class AuctionBid(models.Model):
 class GroupBuyingItem(models.Model):
     #商品id
     goods = models.ForeignKey(Goods)
+    #团购价
+    price = models.FloatField(default=0.00)
     #最少团购数量
     min_num = models.IntegerField(default=0)
     #开始时间

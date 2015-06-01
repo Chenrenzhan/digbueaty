@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Garbini</title>
+
+    <!-- Bootstrap -->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.theme.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/owl-carousel/1.3.3/owl.transitions.min.css" rel="stylesheet">
+
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
+
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+
+    <![endif]-->
+    {% load staticfiles %}
+    <script src="{% static "js/modernizr.custom.63321.js" %}"></script>
+    <!-- <script> </script> -->
+
+
+    <style type="text/css">
+        /*@media (max-width: 500px) {*/
+             /*#directory_tree{*/
+                /*position: static;*/
+                /*top:0px;*/
+            /*}*/
+        /*}*/
+        /*@media (max-width: 1200px) {*/
+             /*#directory_tree{*/
+                /*position: relative;*/
+                /*top:0px;*/
+            /*}*/
+        /*}*/
+/*#directory_tree{*/
+                /*position: relative;*/
+                /*top:0px;*/
+            /*}*/
+        .item_pic{
+            box-sizing: border-box;
+            width: 100%;
+            height: auto !important;
+            text-align: start;
+            border: 0.3em solid white;
+            -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
+            -moz-box-shadow: 0.2em 0.2em 0.5em #666;
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .panel-heading{
+            height: 30px;;
+        }
+        .panel-title{
+            margin-top: -4px;;
+        }
+
+        .panel-label{
+            height: 15px; width: 15px; margin-top: -5px;
+        }
+
+        .panel-input{
+            margin-top: 1px;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+
+    <!-- ========== TOP BAR START ========== -->
+
+    <div id="top-bar">
+        <div class="container">
+
+            <nav id="language-selector">
+                <ul class="nav nav-pills">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
+                        <span id="mail" style="display: none;">{{ user.mail }} </span>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="#">退出</a></li>
+                            <!--<li><a href="#">Spanish</a></li>-->
+                            <!--<li><a href="#">Italian</a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <nav id="shopping-cart">
+                <a href="#">
+                    <i class="fa fa-envelope fa-lg"></i> 消息
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-stack-1x fa-inverse">3</i>
+          </span>
+                </a>
+            </nav>
+
+
+
+            <nav id="top-nav" role="navigation" class="navbar">
+                <div class="navbar-header">
+                    <button data-target=".top-nav" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse top-nav">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">好友<span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">German</a></li>
+                                <li><a href="#">Spanish</a></li>
+                                <li><a href="#">Italian</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">小组<span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">German</a></li>
+                                <li><a href="#">Spanish</a></li>
+                                <li><a href="#">Italian</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">卖家中心<span class="caret"></span></a>
+                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
+                            <ul role="menu" class="dropdown-menu">
+                                {% if has_store %}
+                                    <li><a id="my_store"  href="/store/manage/{{ seller.store.name }}/">我的店</a></li>
+                                {% else %}
+                                    <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<span class="caret"></span></a>
+                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">German</a></li>
+                                <li><a href="#">Spanish</a></li>
+                                <li><a href="#">Italian</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </nav>
+        </div>
+    </div><!-- / #top-bar -->
+
+    <!-- ========== TOP BAR START ========== -->
+
+    <!-- ========== MENU START ========== -->
+
+    <nav id="main-nav">
+        <div class="navbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-nav">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#"><h1>淘美人</h1></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="navbar-collapse collapse main-nav">
+                            <ul class="nav navbar-nav navbar-right">
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">首页</a>
+                                </li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">一口价 <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Home #1 / Slider</a></li>
+                                        <li><a href="#">Home #2 / Categories</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">团购 <b class="caret"></b></a>
+                                    <ul class="dropdown-menu" >
+                                        <li><a href="#">Subcat #1</a></li>
+                                        <li><a href="#">Subcat #2</a></li>
+                                        <li><a href="#">Subcat #3</a></li>
+                                        <li><a href="#">Subcat #4</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Subcat #1</a></li>
+                                        <li><a href="#">Subcat #2</a></li>
+                                        <li><a href="#">Subcat #3</a></li>
+                                        <li><a href="#">Subcat #4</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">众筹 <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Subcat #1</a></li>
+                                        <li><a href="#">Subcat #2</a></li>
+                                        <li><a href="#">Subcat #3</a></li>
+                                        <li><a href="#">Subcat #4</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!--<div class="row">-->
+                    <div class="col-lg-4">
+                        <div class="navbar-collapse collapse main-nav">
+                            <ul class="nav navbar-nav navbar-right" style="width: 100%;">
+                                <div class="input-group" style="padding-top: 0px;padding-bottom: 0px;line-height: 80px;height: 80px;width: 80%;align-items: flex-end">
+                                    <!--<span style="position: relative">-->
+                                    <div style="line-height: 40px;height: 40px;margin-top: 9%; width: 100%">
+                                        <label class="sr-only" for="search">Email address</label>
+                                        <input type="text" class="form-control" placeholder="Search for..." id="search"  style="width: 100%;">
+                                        <!--</span>-->
+        <span class="input-group-btn" >
+        <button class="btn btn-default" type="button" >Go!</button>
+      </span>
+                                    </div>
+                                </div><!-- /input-group -->
+                            </ul>
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
+
+<!-- ========== MENU END ========== -->
+
+
+<!-- ========== CONTENT START ========== -->
+
+<section id="content">
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">店铺管理</a></li>
+            <li>添加商品</li>
+        </ol>
+
+        <div class="row" id="store_manage" >
+            <div class="col-sm-3 sidebar" id="directory_tree" >
+                <aside class="widget widget_product_categories">
+                    <h3 class="widget-title">店铺管理</h3>
+                    <ul>
+                        <li><a href="#">商品管理</a></li>
+                        <li><a href="#">一口价商品</a></li>
+                        <li><a href="#">竞拍商品</a></li>
+                        <li><a href="#">团购商品</a></li>
+                        <li><a href="#">添加商品</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+
+
+            <div class="col-lg-9">
+                <!--<form class="form-horizontal" action="http://127.0.0.1:8000/account/login/action/" method="post">-->
+                <form action="http://127.0.0.1:8000/store/add/item/action/" method="post" enctype="multipart/form-data" target="_self">
+                {% csrf_token %}
+                    <input type="hidden" name="store_name" value="{{store_name}}" />
+                    <div class="form-group" style="padding-top: 0px;">
+                        <label class=" control-label" for="title" style="text-align: left;">
+                            <span style="font-size: 1.2em;">商品标题:</span>
+                        </label>
+                        <input type="text" class="form-control input-sm" id="title" placeholder="商品标题" name="title">
+                    </div>
+                    <div class="form-group" style="padding-top: 0px;">
+                        <label class=" control-label" for="detail" style="text-align: left;">
+                            <span style="font-size: 1.2em;">商品描述:</span>
+                        </label>
+                        <textarea class="form-control" rows="3" placeholder="请简要介绍您的商品" id="detail" name="detail"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <!--<img src="..." alt="..." class="img-thumbnail" data-holder-rendered="true" style="height: 200px; width:200px;">-->
+                            <div id="item_pic_div">
+                            <img id="item_pic" class="item_pic" src="{% static "images/item_default_pic.jpg" %}"  onClick="upload_image.click();" >
+                                 <!--<img src="{% static "images/item_default_pic.jpg" %}" style="display: none;">-->
+                            </div>
+                            <div class="gap-15"></div>
+                            <input id="upload_image" type="file" name="item_pic_file">
+
+
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div>
+                                <div class="row">
+                                    <div class="form-group col-sm-6" style="padding-top: 0px;">
+                                        <label class=" control-label" for="price" style="text-align: left;">
+                                            <span style="font-size: 1.2em;">价格(¥):</span>
+                                        </label>
+                                        <div class="input-group" style="min-width: 100px; width: 80%;">
+                                            <div class="btn input-group-addon">-</div>
+                                            <input type="text" class="form-control input-sm" id="price" value="" name="price"
+                                                   style="text-align: center">
+                                            <div class="btn input-group-addon">+</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-sm-6" style="padding-top: 0px;">
+                                        <label class=" control-label" for="remain" style="text-align: left;">
+                                            <span style="font-size: 1.2em;">库存:</span>
+                                        </label>
+                                        <div class="input-group" style="min-width: 100px; width: 80%;">
+                                            <div class="btn input-group-addon">-</div>
+                                            <input type="text" class="form-control input-sm" id="remain" value="" name="remain"
+                                                   style="text-align: center">
+                                            <div class="btn input-group-addon">+</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="padding-top: 0px;">
+                                    <label class=" control-label"  style="text-align: left;">
+                                        <span style="font-size: 1.2em;">商品种类:</span>
+                                    </label>
+                                    <div >
+                                        <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio1" value="1" > 数码电子
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio2" value="2"> 家电
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio3" value="3"> 服装
+                                        </label>
+                                         <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio4" value="4"> 生活
+                                        </label>
+                                         <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio5" value="5"> 书籍
+                                        </label>
+                                         <label class="radio-inline">
+                                            <input type="radio" name="radio" id="inlineRadio6" value="6" checked="checked"> 其他
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="padding-top: 0px;">
+                                    <label class=" control-label"  style="text-align: left;">
+                                        <span style="font-size: 1.2em;">类型:</span>
+                                    </label>
+
+
+                                    <div class="panel-group" >
+                                        <div class="panel panel-default" id="yikoujia_panel">
+                                            <div class="panel-heading" >
+                                                <h4 class="panel-title" >
+                                                    <label class=" checkbox-inline  control-label" style="height: 15px; width: 15px; margin-top: -5px;">
+                                                        <input class="input-group" type="checkbox" id="" value="1" style="margin-top: 1px;" name="checkbox">
+                                                    </label>
+                                                    <a data-toggle="collapse" data-parent="#accordion"
+                                                       hre="" style="" disabled="true">
+                                                        一口价
+                                                    </a>
+                                                </h4>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="panel panel-default" id="auction_panel">
+                                            <div class="panel-heading" >
+                                                <h4 class="panel-title" >
+                                                    <label class=" checkbox-inline  control-label" style="height: 15px; width: 15px; margin-top: -5px;">
+                                                        <input class="input-group" type="checkbox" id="auction_checkbox" value="2" style="margin-top: 1px;" name="checkbox">
+                                                    </label>
+                                                    <a data-toggle="collapse" data-parent="#accordion" id="auction_panel_a"
+                                                       href="#auction_panel_body" style="">
+                                                        竞拍
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div  class="panel-collapse collapse out" id="auction_panel_body">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="auction_base_price" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">底价(¥):</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="auction_base_price" value="" name="auction_base_price"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="subscription" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">定金(¥):</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="subscription" value="" name="subscription"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="auction_start_time" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">开始时间:</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="auction_start_time" value="" name="auction_start_time"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="auction_end_time" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">结束时间:</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="auction_end_time" value="" name="auction_end_time"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+</div>
+
+                                        <div class="panel panel-default" id="group_buy_panel">
+                                            <div class="panel-heading" >
+                                                <h4 class="panel-title" >
+                                                    <label class=" checkbox-inline  control-label" for="group_checkbox"
+                                                           style="height: 15px; width: 15px; margin-top: -5px;">
+                                                        <input class="input-group" type="checkbox" id="group_checkbox" value="3" style="margin-top: 1px;" name="checkbox">
+                                                    </label>
+                                                    <a data-toggle="collapse" data-parent="#accordion" id="group_buy_panel_a"
+                                                       href="#group_buy_panel_body" style="">
+                                                        团购
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div class="panel-collapse collapse out" id="group_buy_panel_body">
+                                                 <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="group_buy_price" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">团购价(¥):</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_price" value="" name="group_buy_price"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="group_buy_sum" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">至少量:</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_sum" value="" name="group_buy_sum"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="group_buy_start_time" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">开始时间:</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_start_time" value="" name="group_buy_start_time"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-sm-6 " style="padding-top: 0px;">
+                                                            <div class="row">
+                                                                <div class="col-sm-4" style="padding-right: 0px;">
+                                                                    <label class=" control-label" for="group_buy_end_time" style="text-align: left;">
+                                                                        <span style="font-size: 1em;">结束时间:</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-sm-7" style="padding-left: 0px;">
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_end_time" value="" name="group_buy_end_time"
+                                                                           style="text-align: center; height: 25px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    <!--</div>-->
+
+                                </div>
+
+
+                                <!--</form>-->
+                                <div class="gap-30"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="gap-50"></div>
+                    <div style="text-align: center;" >
+                        <input class="btn btn-primary" type="submit" value="确认添加" style="width:200px;" />
+                        <!--<button>确认添加商品</button>-->
+                    </div>
+                    <!--<input type="number" value="1" />-->
+                  </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ========== CONTENT END ========== -->
+
+
+
+<!-- ========== FOOTER START ========== -->
+
+<footer id="footer">
+    <div class="container">
+        <hr>
+        <div class="row">
+
+            <div class="col-sm-3 col-sm-offset-1">
+                <aside class="widget widget_nav_menu">
+                    <h3 class="widget-title">淘美人</h3>
+                    <ul>
+                        <li><a href="#">首页</a></li>
+                        <li><a href="#">一口价</a></li>
+                        <li><a href="#">团购</a></li>
+                        <li><a href="#">竞拍</a></li>
+                        <li><a href="#">众筹</a></li>
+                        <li><a href="#">登录/注册</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="col-sm-4">
+                <aside class="widget widget_nav_menu">
+                    <h3 class="widget-title">商品</h3>
+                    <ul>
+                        <li><a href="#">数码电子</a></li>
+                        <li><a href="#">家电</a></li>
+                        <li><a href="#">服装</a></li>
+                        <li><a href="#">生活</a></li>
+                        <li><a href="#">书籍</a></li>
+                        <li><a href="#">其他</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="col-sm-3">
+                <aside class="widget widget_newsletter">
+                    <h3 class="widget-title">联系我们</h3>
+                    <form action="#" id="newsletter">
+                        <label for="newsletter-email">给我们发邮件</label>
+                        <div class="input-group">
+                            <input type="text" name="newsletter-email" id="newsletter-email" placeholder="Email" class="form-control input-lg">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-lg" type="button"><i class="fa fa-envelope"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="copyright">
+        <div class="container">&copy; Copyright 淘美人 2015 | All Rights Reserved | Designed by <a href="http://github.com/chenrenzhan/digbueaty">chenrenzhan</a></div>
+    </div>
+
+</footer>
+
+<!-- ========== FOOTER END ========== -->
+
+
+
+
+
+<div id="cart-panel" class="panel panel-right" >
+    <aside class="widget_shopping_cart">
+        <h3>Shopping Cart</h3>
+        <ul class="cart_list">
+            <li>
+                <a href="#">
+                    <img alt="" src="http://placehold.it/60x60">
+                    Reshape Panties
+                </a>
+                <span class="quantity">1 × <span class="amount">$12.00</span></span>
+            </li>
+            <li>
+                <a href="#">
+                    <img alt="" src="http://placehold.it/60x60">
+                    Reshape Panties
+                </a>
+                <span class="quantity">1 × <span class="amount">$12.00</span></span>
+            </li>
+            <li>
+                <a href="http://coffeecreamthemes.com/themes/perfekta/wordpress/s/flying-ninja/">
+                    <img alt="" src="http://placehold.it/60x60">
+                    Reshape Panties
+                </a>
+                <span class="quantity">1 × <span class="amount">$12.00</span></span>
+            </li>
+        </ul>
+        <p class="total"><strong>Subtotal:</strong> <span class="amount">$36.00</span></p>
+        <p class="buttons">
+            <a class="btn btn-default btn-lg btn-block" href="#">View Cart</a>
+            <a class="btn btn-primary btn-lg btn-block" href="#">Checkout</a>
+        </p>
+    </aside>
+</div>
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<!--<script src="statics/js/bootstrap.min.js"></script>-->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<!--<script src="../../../statics/js/owl.carousel.min.js"></script>-->
+<script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>
+{% load staticfiles %}
+<script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>
+<!--<script src="{% static "js/jquery.js" %}"></script>-->
+
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
+<script src="{% static "js/uploadPreview.min.js" %}"></script>
+<!--<script src="{% static "js/simpleZoom.js" %}"></script>-->
+
+
+<!--<script src="{% static "js/bootstrap-collapse.js" %}"></script>-->
+
+<!--<script src="{% static "js/jquery.catslider.js" %}"></script>-->
+
+
+<script>
+//    jQuery(document).ready(function($){
+//        var cartPanel = $.jPanelMenu({
+//            menu: '#cart-panel',
+//            trigger: '#shopping-cart a'
+//        });
+//
+//        cartPanel.on();
+//
+//    });
+
+//     //侧栏随屏幕滚动固定
+//    $( '#directory_tree' ).scrollFollow( {
+//        speed: 1000,
+//        offset: 60,
+//        killSwitch: 'exampleLink',
+//        onText: 'Disable Follow',
+//        offText: 'Enable Follow'
+//   } );
+
+$("#auction_start_time").datetimepicker();
+$('#auction_end_time').datetimepicker();
+$("#group_buy_start_time").datetimepicker();
+$('#group_buy_end_time').datetimepicker();
+
+//侧栏随屏幕滚动固定
+$(function(){
+    var parentDivHeight = 0;
+    var topPadding = 100;
+    $(function() {
+        var offset = $("#directory_tree").offset();
+        $(window).scroll(function() {
+            parentDivHeight = $("#directory_tree").parent("div").height();//alert(parentDivHeight);
+            var sideBarHeight = $("#directory_tree").height();
+            if ($(window).scrollTop() > offset.top) {
+                var newPosition = ($(window).scrollTop() - offset.top) + topPadding;
+                var maxPosition = parentDivHeight - (sideBarHeight);
+                if (newPosition > maxPosition) {
+                    newPosition = maxPosition;
+                }
+                $("#directory_tree").stop().animate({
+                    marginTop: newPosition,
+                    speed: 'slow'
+                });
+            } else {
+                $("#directory_tree").stop().animate({
+                    marginTop: 0,
+                    speed: 'slow'
+                });
+            };
+        });
+    });
+});
+
+////关闭折叠面板
+//$(function(){
+//    var $auction_panel_body = $("#auction_panel_body");
+//    var $group_buy_panel_body = $("#group_buy_panel_body");
+//
+//    $("#auction_panel_a").click(function(){alert($(this).hasClass("in"));
+//        if($(this).hasClass("in")){alert('dddddddd');
+//             $("#group_buy_panel_a").removeClass("in");
+//        }
+//    });
+//     $("#group_buy_panel_a").click(function(){
+//        if($(this).hasClass("in")){alert('dddssssssssd');
+//             $("#auction_panel_a").removeClass("in");
+//        }
+//    });
+//
+//    function check(){
+//        if($auction_panel_body.css("display") == "block"){
+//            $group_buy_panel_body.css("display", "none");
+//        }
+//        if($group_buy_panel_body.css("display") == "block"){
+//            $auction_panel_body.css("display", "none");alert($group_buy_panel_body.css("display"));
+//        }
+//    }
+//
+//});
+
+
+    $(function(){
+        $("#item_pic").click = $("#upload_image").click();
+
+        new uploadPreview({ UpBtn: "upload_image", DivShow: "item_pic_div", ImgShow: "item_pic" });
+    })
+
+
+//$(function(){
+//    $("#upload_image").change(function(){alert($("#item_pic").height());
+//        if($("#item_pic").height() > 400){
+//        $("#item_pic").height(400);alert("kkkkkk   " + $("#item_pic").height());
+//    }
+//    });
+//})
+
+//    $(function(){
+//    $("#item_pic_div").enlarge(
+//    {
+//        // 鼠标遮罩层样式
+//        shadecolor: "#FFD24D",
+//        shadeborder: "#FF8000",
+//        shadeopacity: 0.4,
+//        cursor: "move",
+//
+//        // 大图外层样式
+//        layerwidth: 480,
+//        layerheight: 360,
+//        layerborder: "#DDD",
+//        fade: true,
+//
+//        // 大图尺寸
+//        largewidth: 960,
+//        largeheight: 720
+//    });
+//});
+
+
+
+
+</script>
+
+</body>
+</html>

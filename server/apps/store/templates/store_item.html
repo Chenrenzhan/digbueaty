@@ -16,6 +16,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
 
 
     <!--[if lt IE 9]>
@@ -52,7 +53,22 @@
             border: 0.3em solid white;
             -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
             -moz-box-shadow: 0.2em 0.2em 0.5em #666;
-            box-shadow: 0.2em 0.2em 0.5em #666
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .panel-heading{
+            height: 30px;;
+        }
+        .panel-title{
+            margin-top: -4px;;
+        }
+
+        .panel-label{
+            height: 15px; width: 15px; margin-top: -5px;
+        }
+
+        .panel-input{
+            margin-top: 1px;
         }
     </style>
 
@@ -70,11 +86,12 @@
             <nav id="language-selector">
                 <ul class="nav nav-pills">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
+                        <span id="mail" style="display: none;">{{ user.mail }} </span>
                         <ul role="menu" class="dropdown-menu">
-                            <li><a href="#">German</a></li>
-                            <li><a href="#">Spanish</a></li>
-                            <li><a href="#">Italian</a></li>
+                            <li><a href="#">退出</a></li>
+                            <!--<li><a href="#">Spanish</a></li>-->
+                            <!--<li><a href="#">Italian</a></li>-->
                         </ul>
                     </li>
                 </ul>
@@ -125,9 +142,11 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">卖家中心<span class="caret"></span></a>
                             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                {% if has_store %}
+                                    <li><a id="my_store"  href="/store/manage/{{ seller.store.name }}/">我的店</a></li>
+                                {% else %}
+                                    <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
+                                {% endif %}
                             </ul>
                         </li>
 
@@ -252,9 +271,9 @@
     <div class="container">
 
         <ol class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Fow Woman</a></li>
-            <li>Tummy Elastic</li>
+            <li><a href="#">首页</a></li>
+            <li><a href="#">店铺管理</a></li>
+            <li>添加商品</li>
         </ol>
 
         <div class="row" id="store_manage" >
@@ -273,174 +292,264 @@
 
 
 
-            <div class="col-lg-9">
-                <!--<form class="form-horizontal" action="http://127.0.0.1:8000/account/login/action/" method="post">-->
-                <form>
-                {% csrf_token %}
-                    <div class="form-group" style="padding-top: 0px;">
-                        <label class=" control-label" for="account" style="text-align: left;">
-                            <span style="font-size: 1.2em;">商品标题:</span>
-                        </label>
-                        <input type="email" class="form-control input-sm" id="account" placeholder="商品标题" name="email">
-                    </div>
-                    <div class="form-group" style="padding-top: 0px;">
-                        <label class=" control-label" for="account" style="text-align: left;">
-                            <span style="font-size: 1.2em;">商品描述:</span>
-                        </label>
-                        <textarea class="form-control" rows="3" placeholder="请简要介绍您的商品"></textarea>
-                    </div>
+             <div class="col-sm-9">
 
-                    <div class="row">
-                        <div class="col-lg-5">
-                            <!--<img src="..." alt="..." class="img-thumbnail" data-holder-rendered="true" style="height: 200px; width:200px;">-->
-                            <img class="item_pic" src="http://placehold.it/458x480"  >
-                        </div>
+        <ul class="products row">
 
-                        <div class="col-lg-7">
-                            <div>
-                                <div class="row">
-                                <div class="form-group col-sm-6" style="padding-top: 0px;">
-                                    <label class=" control-label" for="account" style="text-align: left;">
-                                        <span style="font-size: 1.2em;">价格(¥):</span>
-                                    </label>
-                                    <div class="input-group" style="min-width: 100px; width: 80%;">
-                                        <div class="btn input-group-addon">-</div>
-                                        <input type="text" class="form-control input-sm" id="exampleInputAmount" value="{{ item.price }}"
-                                               style="text-align: center">
-                                        <div class="btn input-group-addon">+</div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-sm-6" style="padding-top: 0px;">
-                                    <label class=" control-label" for="account" style="text-align: left;">
-                                        <span style="font-size: 1.2em;">库存:</span>
-                                    </label>
-                                    <div class="input-group" style="min-width: 100px; width: 80%;">
-                                        <div class="btn input-group-addon">-</div>
-                                        <input type="text" class="form-control input-sm" id="exampleInputAmount" value="{{ item.price }}"
-                                               style="text-align: center">
-                                        <div class="btn input-group-addon">+</div>
-                                    </div>
-                                </div>
-                                    </div>
-
-                                <div class="form-group" style="padding-top: 0px;">
-                                    <label class=" control-label" for="account" style="text-align: left;">
-                                        <span style="font-size: 1.2em;">类型:</span>
-                                    </label>
-                                    <!--<div class="container">-->
-                                    <!--<div class=" row " style="margin-top: -5px;">-->
-                                        <!--&lt;!&ndash;<input type="email" class="form-control input-sm" id="account" placeholder="商品标题" name="email">&ndash;&gt;-->
-                                        <!--<div class="col-sm-4">-->
-                                            <!--<label class=" checkbox-inline  control-label">-->
-                                                <!--<input class="input-group" type="checkbox" id="inlineCheckbox1" value="option1"> 一口价-->
-                                            <!--</label>-->
-
-                                        <!--</div>-->
-                                        <!--<div class="col-sm-4">-->
-                                            <!--<label class=" checkbox-inline  control-label">-->
-                                                <!--<input class="input-group" type="checkbox" id="inlineCheckbox1" value="option1">-->
-                                                 <!--<li class="dropdown">-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 <b class="caret"></b></a>-->
-                                    <!--<ul class="dropdown-menu" >-->
-                                        <!--<li><a href="#">Subcat #1</a></li>-->
-                                        <!--<li><a href="#">Subcat #2</a></li>-->
-                                        <!--<li><a href="#">Subcat #3</a></li>-->
-                                        <!--<li><a href="#">Subcat #4</a></li>-->
-                                    <!--</ul>-->
-                                <!--</li>-->
-                                            <!--</label>-->
-                                            <!--<div>-->
-                                                <!--<label>开始时间:</label>-->
-                                                <!--<input type="time">-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-sm-4">-->
-                                            <!--<label class=" checkbox-inline  control-label">-->
-                                                <!--<input class="input-group" type="checkbox" id="inlineCheckbox1" value="option1">团购-->
-                                            <!--</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                        <!--</div>-->
-
-
-                                    <div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion"
-          href="#collapseOne">
-          <label class=" checkbox-inline  control-label">
-                                                <input class="input-group" type="checkbox" id="inlineCheckbox1" value="option1">团购
-              </label>
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-        Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-        vice lomo.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion"
-          href="#collapseTwo">
-          点击我进行展开，再次点击我进行折叠。第 2 部分
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-        Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-        vice lomo.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion"
-          href="#collapseThree">
-          点击我进行展开，再次点击我进行折叠。第 3 部分
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-        Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-        vice lomo.
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-                                </div>
-
-
-                                <!--</form>-->
-                                <div class="gap-30"></div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="gap-50"></div>
-                    <div>
-                        <button>确认添加商品</button>
-                    </div>
-                    <input type="number" value="1">
-                </form>
+          <li class="col-sm-4 first">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
             </div>
+          </li>
+
+          <li class="col-sm-4">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 first">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+          <li class="col-sm-4 last">
+            <div class="product">
+              <div class="thumbnail">
+                <a href="product.html"><img src="http://placehold.it/263x388" alt=""></a>
+                <a href="#" class="add-to-cart" title="Add to Cart">
+                  <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </div>
+              <hr>
+              <div class="title">
+                <h3><a href="#">Reshape Panties</a></h3>
+                <p>by Jack &amp; Jones</p>
+              </div>
+              <span class="price">$18</span>
+            </div>
+          </li>
+
+        </ul>
+
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+
+      </div>
+
 
         </div>
 
@@ -562,35 +671,62 @@
 <script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>
 {% load staticfiles %}
 <script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>
-<script src="{% static "js/jquery.js" %}"></script>
-<script src="{% static "js/ui.core.js" %}"></script>
-<script src="{% static "js/jquery.scrollfollow.js" %}"></script>
-<!--<script src="{% static "js/jquery-ui.min.js" %}"></script>-->
+<!--<script src="{% static "js/jquery.js" %}"></script>-->
 
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
+<script src="{% static "js/uploadPreview.min.js" %}"></script>
+<!--<script src="{% static "js/simpleZoom.js" %}"></script>-->
+
+
+<!--<script src="{% static "js/bootstrap-collapse.js" %}"></script>-->
 
 <!--<script src="{% static "js/jquery.catslider.js" %}"></script>-->
-<!--<script src="../../../statics/js/main.js"></script>-->
 
 
 <script>
-    jQuery(document).ready(function($){
-        var cartPanel = $.jPanelMenu({
-            menu: '#cart-panel',
-            trigger: '#shopping-cart a'
+
+$("#auction_start_time").datetimepicker();
+$('#auction_end_time').datetimepicker();
+$("#group_buy_start_time").datetimepicker();
+$('#group_buy_end_time').datetimepicker();
+
+//侧栏随屏幕滚动固定
+$(function(){
+    var parentDivHeight = 0;
+    var topPadding = 100;
+    $(function() {
+        var offset = $("#directory_tree").offset();
+        $(window).scroll(function() {
+            parentDivHeight = $("#directory_tree").parent("div").height();//alert(parentDivHeight);
+            var sideBarHeight = $("#directory_tree").height();
+            if ($(window).scrollTop() > offset.top) {
+                var newPosition = ($(window).scrollTop() - offset.top) + topPadding;
+                var maxPosition = parentDivHeight - (sideBarHeight);
+                if (newPosition > maxPosition) {
+                    newPosition = maxPosition;
+                }
+                $("#directory_tree").stop().animate({
+                    marginTop: newPosition,
+                    speed: 'slow'
+                });
+            } else {
+                $("#directory_tree").stop().animate({
+                    marginTop: 0,
+                    speed: 'slow'
+                });
+            };
         });
-
-        cartPanel.on();
-
     });
+});
 
-     //侧栏随屏幕滚动固定
-    $( '#directory_tree' ).scrollFollow( {
-        speed: 1000,
-        offset: 60,
-        killSwitch: 'exampleLink',
-        onText: 'Disable Follow',
-        offText: 'Enable Follow'
-   } );
+
+
+    $(function(){
+        $("#item_pic").click = $("#upload_image").click();
+
+        new uploadPreview({ UpBtn: "upload_image", DivShow: "item_pic_div", ImgShow: "item_pic" });
+    })
 
 </script>
 

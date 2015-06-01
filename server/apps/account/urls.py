@@ -8,7 +8,7 @@ from views import *
 
 urlpatterns = patterns('',
     url(r'^signup/$', signup),
-    url(r'^signup/active/$', signup_action),
+    url(r'^signup/action/$', signup_action),
     url(r'^signup/error/$', signup_error),
     url(r'^logout', logout),
     url(r'^login/$', login),
