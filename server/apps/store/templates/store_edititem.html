@@ -271,9 +271,9 @@
     <div class="container">
 
         <ol class="breadcrumb">
-            <li><a href="#">首页</a></li>
+            <li><a href="/index/">首页</a></li>
             <li><a href="/store/{{ seller.store.id }}/">店铺管理</a></li>
-            <li>添加商品</li>
+            <li>修改商品信息</li>
         </ol>
 
         <div class="row" id="store_manage" >
@@ -281,11 +281,11 @@
                 <aside class="widget widget_product_categories">
                     <h3 class="widget-title">店铺管理</h3>
                     <ul>
-                        <li><a href="#">商品管理</a></li>
-                        <li><a href="#">一口价商品</a></li>
-                        <li><a href="#">竞拍商品</a></li>
-                        <li><a href="#">团购商品</a></li>
-                        <li><a href="#">添加商品</a></li>
+                        <li><a href="#yikoujia_div">一口价商品</a></li>
+                        <li><a href="#auction_div">竞拍商品</a></li>
+                        <li><a href="#group_buy_div">团购商品</a></li>
+                        <!--<li><a href="#">商品管理</a></li>-->
+                        <li><a href="/store/add/item/{{ seller.store.id }}/">添加商品</a></li>
                     </ul>
                 </aside>
             </div>
@@ -294,27 +294,27 @@
 
             <div class="col-lg-9">
                 <!--<form class="form-horizontal" action="http://127.0.0.1:8000/account/login/action/" method="post">-->
-                <form action="http://127.0.0.1:8000/store/add/item/action/" method="post" enctype="multipart/form-data" target="_self">
+                <form action="/store/{{ seller.store.id }}/edit/item/{{goods.id}}/action/" method="post" enctype="multipart/form-data" target="_self">
                 {% csrf_token %}
                     <input type="hidden" name="store_id" value="{{store_id}}" />
                     <div class="form-group" style="padding-top: 0px;">
                         <label class=" control-label" for="title" style="text-align: left;">
                             <span style="font-size: 1.2em;">商品标题:</span>
                         </label>
-                        <input type="text" class="form-control input-sm" id="title" placeholder="商品标题" name="title">
+                        <input type="text" class="form-control input-sm" id="title" placeholder="商品标题" name="title" value="{{goods.title}}">
                     </div>
                     <div class="form-group" style="padding-top: 0px;">
                         <label class=" control-label" for="detail" style="text-align: left;">
                             <span style="font-size: 1.2em;">商品描述:</span>
                         </label>
-                        <textarea class="form-control" rows="3" placeholder="请简要介绍您的商品" id="detail" name="detail"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="请简要介绍您的商品" id="detail" name="detail" value="">{{goods.detail}}</textarea>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-5">
                             <!--<img src="..." alt="..." class="img-thumbnail" data-holder-rendered="true" style="height: 200px; width:200px;">-->
                             <div id="item_pic_div">
-                            <img id="item_pic" class="item_pic" src="{% static "images/item_default_pic.jpg" %}"  onClick="upload_image.click();" >
+                            <img id="item_pic" class="item_pic" src="{{pic.picUrl.url}}"  onClick="upload_image.click();" >
                                  <!--<img src="{% static "images/item_default_pic.jpg" %}" style="display: none;">-->
                             </div>
                             <div class="gap-15"></div>
@@ -332,7 +332,7 @@
                                         </label>
                                         <div class="input-group" style="min-width: 100px; width: 80%;">
                                             <div class="btn input-group-addon">-</div>
-                                            <input type="text" class="form-control input-sm" id="price" value="" name="price"
+                                            <input type="text" class="form-control input-sm" id="price" value="{{goods.price}}" name="price"
                                                    style="text-align: center">
                                             <div class="btn input-group-addon">+</div>
                                         </div>
@@ -344,7 +344,7 @@
                                         </label>
                                         <div class="input-group" style="min-width: 100px; width: 80%;">
                                             <div class="btn input-group-addon">-</div>
-                                            <input type="text" class="form-control input-sm" id="remain" value="" name="remain"
+                                            <input type="text" class="form-control input-sm" id="remain" value="{{goods.remain}}" name="remain"
                                                    style="text-align: center">
                                             <div class="btn input-group-addon">+</div>
                                         </div>
@@ -355,26 +355,26 @@
                                     <label class=" control-label"  style="text-align: left;">
                                         <span style="font-size: 1.2em;">商品种类:</span>
                                     </label>
-                                    <div >
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio1" value="1" > 数码电子
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio2" value="2"> 家电
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio3" value="3"> 服装
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio4" value="4"> 生活
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio5" value="5"> 书籍
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio6" value="6" checked="checked"> 其他
-                                        </label>
-                                    </div>
+                                    <!--<div >-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio1" value="1" > 数码电子-->
+                                        <!--</label>-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio2" value="2"> 家电-->
+                                        <!--</label>-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio3" value="3"> 服装-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio4" value="4"> 生活-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio5" value="5"> 书籍-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio6" value="6" checked="checked"> 其他-->
+                                        <!--</label>-->
+                                    <!--</div>-->
                                 </div>
 
                                 <div class="form-group" style="padding-top: 0px;">
@@ -382,13 +382,17 @@
                                         <span style="font-size: 1.2em;">类型:</span>
                                     </label>
 
-
                                     <div class="panel-group" >
                                         <div class="panel panel-default" id="yikoujia_panel">
                                             <div class="panel-heading" >
                                                 <h4 class="panel-title" >
                                                     <label class=" checkbox-inline  control-label" style="height: 15px; width: 15px; margin-top: -5px;">
-                                                        <input class="input-group" type="checkbox" id="" value="1" style="margin-top: 1px;" name="checkbox">
+                                                        {% if yikoujia %}
+                                                        <input class="input-group" type="checkbox"  checked="checked" value="1" style="margin-top: 1px;" name="checkbox">
+                                                        {% else %}
+                                                        <input class="input-group" type="checkbox"  value="1" style="margin-top: 1px;" name="checkbox">
+                                                        {% endif %}
+
                                                     </label>
                                                     <a data-toggle="collapse" data-parent="#accordion"
                                                        hre="" style="" disabled="true">
@@ -403,7 +407,11 @@
                                             <div class="panel-heading" >
                                                 <h4 class="panel-title" >
                                                     <label class=" checkbox-inline  control-label" style="height: 15px; width: 15px; margin-top: -5px;">
-                                                        <input class="input-group" type="checkbox" id="auction_checkbox" value="2" style="margin-top: 1px;" name="checkbox">
+                                                       {% if auction %}
+                                                        <input class="input-group" type="checkbox"  checked="checked" value="2" style="margin-top: 1px;" name="checkbox">
+                                                        {% else %}
+                                                        <input class="input-group" type="checkbox"  value="2" style="margin-top: 1px;" name="checkbox">
+                                                        {% endif %}
                                                     </label>
                                                     <a data-toggle="collapse" data-parent="#accordion" id="auction_panel_a"
                                                        href="#auction_panel_body" style="">
@@ -422,7 +430,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="auction_base_price" value="" name="auction_base_price"
+                                                                    <input type="text" class="form-control input-xs" id="auction_base_price" value="{{auction.base_price}}" name="auction_base_price"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -436,7 +444,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="subscription" value="" name="subscription"
+                                                                    <input type="text" class="form-control input-xs" id="subscription" value="{{auction.subscription}}" name="subscription"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -452,7 +460,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="auction_start_time" value="" name="auction_start_time"
+                                                                    <input type="text" class="form-control input-xs" id="auction_start_time" value="{{auction.start_time|date:"Y/m/d H:i"}}" name="auction_start_time"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -466,7 +474,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="auction_end_time" value="" name="auction_end_time"
+                                                                    <input type="text" class="form-control input-xs" id="auction_end_time" value="{{auction.start_time|date:"Y/m/d H:i"}}" name="auction_end_time"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -475,14 +483,18 @@
 
                                                 </div>
                                             </div>
-</div>
+                                        </div>
 
                                         <div class="panel panel-default" id="group_buy_panel">
                                             <div class="panel-heading" >
                                                 <h4 class="panel-title" >
                                                     <label class=" checkbox-inline  control-label" for="group_checkbox"
                                                            style="height: 15px; width: 15px; margin-top: -5px;">
+                                                        {% if yikoujia %}
+                                                        <input class="input-group" type="checkbox"  id="group_checkbox" checked="checked" value="3" style="margin-top: 1px;" name="checkbox">
+                                                        {% else %}
                                                         <input class="input-group" type="checkbox" id="group_checkbox" value="3" style="margin-top: 1px;" name="checkbox">
+                                                        {% endif %}
                                                     </label>
                                                     <a data-toggle="collapse" data-parent="#accordion" id="group_buy_panel_a"
                                                        href="#group_buy_panel_body" style="">
@@ -501,7 +513,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="group_buy_price" value="" name="group_buy_price"
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_price" value="{{group_buy.price}}" name="group_buy_price"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -515,7 +527,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="group_buy_sum" value="" name="group_buy_sum"
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_sum" value="{{group_buy.min_num}}" name="group_buy_sum"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -531,7 +543,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="group_buy_start_time" value="" name="group_buy_start_time"
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_start_time" value="{{group_buy.start_time|date:"Y/m/d H:i"}}" name="group_buy_start_time"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -545,7 +557,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="col-sm-7" style="padding-left: 0px;">
-                                                                    <input type="text" class="form-control input-xs" id="group_buy_end_time" value="" name="group_buy_end_time"
+                                                                    <input type="text" class="form-control input-xs" id="group_buy_end_time" value="{{group_buy.end_time|date:"Y/m/d H:i"}}" name="group_buy_end_time"
                                                                            style="text-align: center; height: 25px;">
                                                                 </div>
                                                             </div>
@@ -572,7 +584,7 @@
 
                     <div class="gap-50"></div>
                     <div style="text-align: center;" >
-                        <input class="btn btn-primary" type="submit" value="确认添加" style="width:200px;" />
+                        <input class="btn btn-primary" type="submit" value="保存修改" style="width:200px;" />
                         <!--<button>确认添加商品</button>-->
                     </div>
                     <!--<input type="number" value="1" />-->

@@ -75,4 +75,6 @@ def login_error(request):
 """登出"""
 def logout(request):
 
-    pass
+    if 'mail' in request.session:
+        del request.session['mail']
+    return render_to_response('login.html',context_instance=RequestContext(request))

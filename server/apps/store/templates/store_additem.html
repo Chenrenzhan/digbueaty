@@ -271,7 +271,7 @@
     <div class="container">
 
         <ol class="breadcrumb">
-            <li><a href="#">首页</a></li>
+            <li><a href="/index/">首页</a></li>
             <li><a href="/store/{{ seller.store.id }}/">店铺管理</a></li>
             <li>添加商品</li>
         </ol>
@@ -281,11 +281,11 @@
                 <aside class="widget widget_product_categories">
                     <h3 class="widget-title">店铺管理</h3>
                     <ul>
-                        <li><a href="#">商品管理</a></li>
-                        <li><a href="#">一口价商品</a></li>
-                        <li><a href="#">竞拍商品</a></li>
-                        <li><a href="#">团购商品</a></li>
-                        <li><a href="#">添加商品</a></li>
+                        <li><a href="#yikoujia_div">一口价商品</a></li>
+                        <li><a href="#auction_div">竞拍商品</a></li>
+                        <li><a href="#group_buy_div">团购商品</a></li>
+                        <!--<li><a href="#">商品管理</a></li>-->
+                        <li><a href="/store/add/item/{{ seller.store.id }}/">添加商品</a></li>
                     </ul>
                 </aside>
             </div>
@@ -294,7 +294,7 @@
 
             <div class="col-lg-9">
                 <!--<form class="form-horizontal" action="http://127.0.0.1:8000/account/login/action/" method="post">-->
-                <form action="http://127.0.0.1:8000/store/add/item/action/" method="post" enctype="multipart/form-data" target="_self">
+                <form action="/store/{{ seller.store.id }}/add/item/action/" method="post" enctype="multipart/form-data" target="_self">
                 {% csrf_token %}
                     <input type="hidden" name="store_id" value="{{store_id}}" />
                     <div class="form-group" style="padding-top: 0px;">
@@ -351,31 +351,31 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="padding-top: 0px;">
-                                    <label class=" control-label"  style="text-align: left;">
-                                        <span style="font-size: 1.2em;">商品种类:</span>
-                                    </label>
-                                    <div >
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio1" value="1" > 数码电子
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio2" value="2"> 家电
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio3" value="3"> 服装
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio4" value="4"> 生活
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio5" value="5"> 书籍
-                                        </label>
-                                         <label class="radio-inline">
-                                            <input type="radio" name="radio" id="inlineRadio6" value="6" checked="checked"> 其他
-                                        </label>
-                                    </div>
-                                </div>
+                                <!--<div class="form-group" style="padding-top: 0px;">-->
+                                    <!--<label class=" control-label"  style="text-align: left;">-->
+                                        <!--<span style="font-size: 1.2em;">商品种类:</span>-->
+                                    <!--</label>-->
+                                    <!--<div >-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio1" value="1" > 数码电子-->
+                                        <!--</label>-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio2" value="2"> 家电-->
+                                        <!--</label>-->
+                                        <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio3" value="3"> 服装-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio4" value="4"> 生活-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio5" value="5"> 书籍-->
+                                        <!--</label>-->
+                                         <!--<label class="radio-inline">-->
+                                            <!--<input type="radio" name="radio" id="inlineRadio6" value="6" checked="checked"> 其他-->
+                                        <!--</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
 
                                 <div class="form-group" style="padding-top: 0px;">
                                     <label class=" control-label"  style="text-align: left;">

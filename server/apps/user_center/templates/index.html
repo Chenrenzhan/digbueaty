@@ -7,15 +7,16 @@
 
     <!-- Bootstrap -->
     {% load staticfiles %}
-
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.theme.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/owl-carousel/1.3.3/owl.transitions.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
 
 
     <!--[if lt IE 9]>
@@ -24,7 +25,52 @@
     <![endif]-->
     {% load staticfiles %}
     <script src="{% static "js/modernizr.custom.63321.js" %}"></script>
-<!-- <script> </script> -->
+    <!-- <script> </script> -->
+
+
+    <style type="text/css">
+        /*@media (max-width: 500px) {*/
+             /*#directory_tree{*/
+                /*position: static;*/
+                /*top:0px;*/
+            /*}*/
+        /*}*/
+        /*@media (max-width: 1200px) {*/
+             /*#directory_tree{*/
+                /*position: relative;*/
+                /*top:0px;*/
+            /*}*/
+        /*}*/
+/*#directory_tree{*/
+                /*position: relative;*/
+                /*top:0px;*/
+            /*}*/
+        .item_pic{
+            box-sizing: border-box;
+            width: 100%;
+            height: auto !important;
+            text-align: start;
+            border: 0.3em solid white;
+            -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
+            -moz-box-shadow: 0.2em 0.2em 0.5em #666;
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .panel-heading{
+            height: 30px;;
+        }
+        .panel-title{
+            margin-top: -4px;;
+        }
+
+        .panel-label{
+            height: 15px; width: 15px; margin-top: -5px;
+        }
+
+        .panel-input{
+            margin-top: 1px;
+        }
+    </style>
 
 </head>
 <body>
@@ -43,7 +89,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
                         <span id="mail" style="display: none;">{{ user.mail }} </span>
                         <ul role="menu" class="dropdown-menu">
-                            <li><a href="#">退出</a></li>
+                            <li><a href="/account/logout/">退出</a></li>
                             <!--<li><a href="#">Spanish</a></li>-->
                             <!--<li><a href="#">Italian</a></li>-->
                         </ul>
@@ -77,18 +123,18 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">好友<span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">小组<span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
@@ -97,12 +143,13 @@
                             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
                             <ul role="menu" class="dropdown-menu">
                                 {% if has_store %}
-                                    <li><a id="my_store"  href="/store/manage/{{ seller.store.name }}/">我的店</a></li>
+                                    <li><a id="my_store"  href="/store/{{ seller.store.id }}/">我的店</a></li>
                                 {% else %}
                                     <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
                                 {% endif %}
                             </ul>
                         </li>
+
                         <!-- 申请开店 -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form id="apply_store_form" method="post" action="http://127.0.0.1:8000/usercenter/applystore/">
@@ -140,9 +187,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<span class="caret"></span></a>
                             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
@@ -167,59 +214,59 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#"><h1>淘美人</h1></a>
+                            <a class="navbar-brand" href="/index/"><h1>淘美人</h1></a>
                         </div>
                     </div>
 
                     <div class="col-lg-6">
 
-                        <div class="navbar-collapse collapse main-nav">
-                            <ul class="nav navbar-nav navbar-right">
+                        <!--<div class="navbar-collapse collapse main-nav">-->
+                            <!--<ul class="nav navbar-nav navbar-right">-->
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">首页</a>
-                                </li>
+                                <!--&lt;!&ndash;<li class="dropdown">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<a href="#" class="dropdown-toggle" data-toggle="dropdown">首页</a>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">一口价 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Home #1 / Slider</a></li>
-                                        <li><a href="#">Home #2 / Categories</a></li>
-                                    </ul>
-                                </li>
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">一口价 </a>-->
+                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Home #1 / Slider</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Home #2 / Categories</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                <!--</li>-->
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">团购 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu" >
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">团购 </a>-->
+                                    <!--&lt;!&ndash;<ul class="dropdown-menu" >&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                <!--</li>-->
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 </a>-->
+                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                <!--</li>-->
 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">众筹 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">众筹 </a>-->
+                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                <!--</li>-->
 
-                            </ul>
-                        </div>
+                            <!--</ul>-->
+                        <!--</div>-->
 
                     </div>
 
@@ -231,11 +278,11 @@
                                     <!--<span style="position: relative">-->
                                     <div style="line-height: 40px;height: 40px;margin-top: 9%; width: 100%">
                                         <label class="sr-only" for="search">Email address</label>
-                                        <input type="text" class="form-control" placeholder="Search for..." id="search"  style="width: 100%;">
+                                        <input type="text" class="form-control" placeholder="搜索..." id="search"  style="width: 100%;">
                                         <!--</span>-->
-        <span class="input-group-btn" >
-        <button class="btn btn-default" type="button" >Go!</button>
-      </span>
+                                        <span class="input-group-btn" >
+                                            <button class="btn btn-default" type="button" >Go!</button>
+                                        </span>
                                     </div>
                                 </div><!-- /input-group -->
                             </ul>
@@ -251,12 +298,218 @@
 <!-- ========== MENU END ========== -->
 
 
-<br>
-fdfdfd
-<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+<!-- ========== CONTENT START ========== -->
 
-<br>
+<section id="content">
+    <div class="container">
 
+        <ol class="breadcrumb">
+            <li><a href="#">首页</a></li>
+            <!--<li><a href="#">店铺管理</a></li>-->
+            <!--<li>添加商品</li>-->
+        </ol>
+
+        <div class="row" id="store_manage" >
+            <div class="col-sm-3 sidebar" id="directory_tree" >
+                <aside class="widget widget_product_categories">
+                    <h3 class="widget-title">商品分类</h3>
+                    <ul>
+                        <li><a href="#yikoujia_div">一口价商品</a></li>
+                        <li><a href="#auction_div">竞拍商品</a></li>
+                        <li><a href="#group_buy_div">团购商品</a></li>
+                        <!--<li><a href="#">商品管理</a></li>-->
+                        <!--<li><a href="#">添加商品</a></li>-->
+                    </ul>
+                </aside>
+            </div>
+
+    <!--数码电子-->
+    <!--家电-->
+    <!--服装-->
+    <!--生活-->
+    <!--书籍-->
+    <!--其他-->
+
+
+
+            <div class="col-sm-9" >
+
+                <ul class="products row">
+
+                    <div id="yikoujia_div" style="position: static">
+                        <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">一口价商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow: hidden">
+                            {% for yikoujia in yikoujia_list %}
+                            <li class="col-sm-4 first">
+                                <div class="product">
+                                    <div class="thumbnail">
+                                        <a href="product.html" >
+                                            <div class="item_pic_div" style="overflow: hidden;">
+                                                <img src="{{ yikoujia.pic.picUrl.url }}" alt="">
+                                            </div>
+                                        </a>
+                                        <a href="#" class="add-to-cart" title="立即购买">
+                                      <span class="fa-stack fa-2x">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                                      </span>
+                                        </a>
+                                    </div>
+                                    <hr>
+                                    <!--<div class="row">-->
+                                    <div class="title " style="width:90%;">
+                                        <h3><a href="#">{{ yikoujia.item.goods.title }}</a></h3>
+                                        <p>{{yikoujia.item.goods.detail}}</p>
+                                    </div>
+                                    <div class="">
+                                        <span class="price">￥{{yikoujia.item.goods.price}}</span>
+                                    </div>
+                                </div>
+                                <!--</div>-->
+                            </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="auction_div" style="position: static">
+                        <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">竞拍商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="overflow: hidden">
+                            {% for auction in auction_list %}
+                            <li class="col-sm-4 first">
+                                <div class="product">
+                                    <div class="thumbnail">
+                                        <a href="product.html" >
+                                            <div class="item_pic_div" style="overflow: hidden;">
+                                                <img src="{{ auction.pic.picUrl.url }}" alt="">
+                                            </div>
+                                        </a>
+                                        <a href="#" class="add-to-cart" title="立即购买">
+                                      <span class="fa-stack fa-2x">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                                      </span>
+                                        </a>
+                                    </div>
+                                    <hr>
+                                    <!--<div class="row">-->
+                                    <div class="title " style="width:90%;">
+                                        <h3><a href="#">{{ auction.item.goods.title }}</a></h3>
+                                        <p>{{auction.item.goods.detail}}</p>
+                                    </div>
+                                     <div class="time" style="width:90%;margin-left: 15px;">
+                                        <p>开始：{{ auction.item.start_time|date:"Y-m-d H:i:s" }}</p>
+                                        <p>截止：{{ auction.item.end_time|date:"Y-m-d H:i:s" }}</p>
+                                    </div>
+                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                        <p>底价：{{ auction.item.base_price }}</p>
+                                    </div>
+                                    <div class="">
+                                        <span class="price">当前价：￥{{auction.item.hightest_price}}</span>
+                                    </div>
+                                    <!--<div class="">-->
+                                        <!--<span class="price">￥{{auction.item.goods.price}}</span>-->
+                                    <!--</div>-->
+                                </div>
+                                <!--</div>-->
+                            </li>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                     <div id="group_buy_div" style="position: static">
+                        <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">团购商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="overflow: hidden">
+                            {% for group_buy in group_buy_list %}
+                            <li class="col-sm-4 first">
+                                <div class="product">
+                                    <div class="thumbnail">
+                                        <a href="product.html" >
+                                            <div class="item_pic_div" style="overflow: hidden;">
+                                                <img src="{{ group_buy.pic.picUrl.url }}" alt="">
+                                            </div>
+                                        </a>
+                                        <a href="#" class="add-to-cart" title="立即购买">
+                                          <span class="fa-stack fa-2x">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                                          </span>
+                                        </a>
+                                    </div>
+                                    <hr>
+                                    <!--<div class="row">-->
+                                    <div class="title " style="width:90%;">
+                                        <h3><a href="#">{{ group_buy.item.goods.title }}</a></h3>
+                                        <p>{{group_buy.item.goods.detail}}</p>
+                                    </div>
+                                    <div class="time" style="width:90%;margin-left: 15px;">
+                                        <p>开始：{{ group_buy.item.start_time|date:"Y-m-d H:i:s" }}</p>
+                                        <p>截止：{{ group_buy.item.end_time|date:"Y-m-d H:i:s" }}</p>
+                                    </div>
+                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                        <p>至少数量：{{ group_buy.item.min_sum }}</p>
+                                    </div>
+                                    <div class="">
+                                        <span class="price">团购价：￥{{group_buy.item.goods.price}}</span>
+                                    </div>
+                                </div>
+                                <!--</div>-->
+                            </li>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </ul>
+
+                <!--<ul class="pagination">-->
+                    <!--<li><a href="#">&laquo;</a></li>-->
+                    <!--<li><a href="#">1</a></li>-->
+                    <!--<li><a href="#">2</a></li>-->
+                    <!--<li><a href="#">3</a></li>-->
+                    <!--<li><a href="#">4</a></li>-->
+                    <!--<li><a href="#">5</a></li>-->
+                    <!--<li><a href="#">&raquo;</a></li>-->
+                <!--</ul>-->
+
+            </div>
+
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ========== CONTENT END ========== -->
 
 
 
@@ -321,6 +574,10 @@ fdfdfd
 
 <!-- ========== FOOTER END ========== -->
 
+
+
+
+
 <div id="cart-panel" class="panel panel-right" >
     <aside class="widget_shopping_cart">
         <h3>Shopping Cart</h3>
@@ -366,31 +623,65 @@ fdfdfd
 <!--<script src="../../../statics/js/owl.carousel.min.js"></script>-->
 <script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>
 <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<!--{% load staticfiles %}-->
-<!--<script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>--> <!-- 对模态框弹出有影响-->
-<!--<script src="{% static "js/bootstrap-modal.js" %}"></script>-->
 {% load staticfiles %}
-<script src="{% static "js/owl.carousel.min.js" %}"></script>
-<!--<script src="{% static "js/jquery.cookie.js" %}"></script>-->
+<script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>
+<!--<script src="{% static "js/jquery.js" %}"></script>-->
+
+
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
+<script src="{% static "js/uploadPreview.min.js" %}"></script>
+<!--<script src="{% static "js/simpleZoom.js" %}"></script>-->
+
+
+<!--<script src="{% static "js/bootstrap-collapse.js" %}"></script>-->
 
 <!--<script src="{% static "js/jquery.catslider.js" %}"></script>-->
-<!--<script src="../../../statics/js/main.js"></script>-->
 
 
 <script>
-//    jQuery(document).ready(function($){
-//        var cartPanel = $.jPanelMenu({
-//            menu: '#cart-panel',
-//            trigger: '#shopping-cart a'
-//        });
-//
-//        cartPanel.on();
-//    });
 
-//    $("#apply_store").click(function(){
-//        $("#exampleModal").modal('toggle');
-//        $("#exampleModal")[0].focus();
-//    });
+//$("#auction_start_time").datetimepicker();
+//$('#auction_end_time').datetimepicker();
+//$("#group_buy_start_time").datetimepicker();
+//$('#group_buy_end_time').datetimepicker();
+
+//侧栏随屏幕滚动固定
+$(function(){
+    var parentDivHeight = 0;
+    var topPadding = 100;
+    $(function() {
+        var offset = $("#directory_tree").offset();
+        $(window).scroll(function() {
+            parentDivHeight = $("#directory_tree").parent("div").height();//alert(parentDivHeight);
+            var sideBarHeight = $("#directory_tree").height();
+            if ($(window).scrollTop() > offset.top) {
+                var newPosition = ($(window).scrollTop() - offset.top) + topPadding;
+                var maxPosition = parentDivHeight - (sideBarHeight);
+                if (newPosition > maxPosition) {
+                    newPosition = maxPosition;
+                }
+                $("#directory_tree").stop().animate({
+                    marginTop: newPosition,
+                    speed: 'slow'
+                });
+            } else {
+                $("#directory_tree").stop().animate({
+                    marginTop: 0,
+                    speed: 'slow'
+                });
+            };
+        });
+    });
+});
+
+$(function(){
+    $(".item_pic_div").each(function(index){
+        var width =  $(this).width();
+        var height = width * 1.2;
+        $(this).height(height);
+    });
+});
 
 $(function(){
     $("#applystore_submit").click(function(){
@@ -440,6 +731,7 @@ console.log(information);
             var is_success = result.is_success;
             if(is_success){
                 alert("申请开店成功");
+                location.reload(true);
                 return true;
             }
             else{
@@ -450,7 +742,6 @@ console.log(information);
 
     });
 }
-
 </script>
 
 </body>

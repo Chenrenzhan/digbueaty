@@ -18,26 +18,18 @@ from market.models import PicSet, YiKouJiaItem, AuctionItem, GroupBuyingItem
 '''时间格式'''
 TIME_FORM =  '%Y/%m/%d %H:%M'
 
-'''保存上传图片'''
-def save_pic(request, goods):
-    try:
-        reqfile = request.FILES['item_pic_file']#picfile要和html里面一致
-        img = Image.open(reqfile)
-        img.thumbnail((500,500),Image.ANTIALIAS)#对图片进行等比缩放
 
-        name = get_md5_value(reqfile.name)
-        name += str(time.time())
-        name = 'media/'+ name + '.png'
-        path = os.path.join(BASE_DIR, name).replace('\\','/')
-        # re = img.save(path, 'png')#保存图片
-        reqfile.name = path
+def items(item_list):
+    items=[]
+    for item in item_list:
+        goods = item.goods
         try:
-            pic_set = PicSet.objects.create(goods=goods, picUrl=reqfile)
+            pic = PicSet.objects.get(goods=goods)
+            items.append({'item':item, 'pic':pic})
         except Exception as e:
             print(e)
-    except Exception as e:
-        print(e)
-        return HttpResponse("Error %s" % e)#异常，查看报错信息
+    return items
+
 
 '''返回字符串的MD5'''
 def get_md5_value(src):
@@ -122,20 +114,4 @@ def group_buy(request, goods):
         print(e)
 
 
-def delete_item(goods):
-    try:
-        YiKouJiaItem.objects.get(goods=goods).delete()
-    except :
-        pass
-    try:
-        AuctionItem.objects.get(goods=goods).delete()
-    except :
-        pass
-    try:
-        GroupBuyingItem.objects.get(goods=goods).delete()
-    except :
-        pass
-    # try:
-    #     goods.delete()
-    # except:
-    #     pass
+

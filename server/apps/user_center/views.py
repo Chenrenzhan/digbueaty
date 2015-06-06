@@ -15,9 +15,11 @@ import json
 
 from account.models import User, Seller
 from store.models import Store
+from market.models import Goods, PicSet,YiKouJiaItem, AuctionItem, GroupBuyingItem
+from action import items
 
 def index(request):
-    #标记是否已经开了点,0表示未开
+    #标记是否已经开了点店,0表示未开
     has_store = False
     seller = None
     store = None
@@ -36,7 +38,23 @@ def index(request):
             has_store = False
         print(user.uname)
 
-        variable = {'user':user, 'has_store': has_store, 'seller': seller}
+
+        yikoujia_list=[]
+        auction_list=[]
+        group_buy_list=[]
+        try:
+            yikoujia_list=YiKouJiaItem.objects.all()
+            auction_list=AuctionItem.objects.all()
+            group_buy_list=GroupBuyingItem.objects.all()
+
+        except Exception as e:
+            print(e)
+
+
+         # variable={'yikoujia_list':yikoujia_list, 'auction_list':auction_list, 'group_buy_list':group_buy_list}
+
+        variable = {'user':user, 'has_store': has_store, 'seller': seller,
+                    'yikoujia_list':items(yikoujia_list), 'auction_list':items(auction_list), 'group_buy_list':items(group_buy_list)}
         return render_to_response('index.html', variable, context_instance=RequestContext(request))
     else:
         return render_to_response('index.html',context_instance=RequestContext(request))
@@ -64,21 +82,23 @@ def apply_store(request):
 
         user = User.objects.get(mail = mail)
         print(user)
-
-        try:
-            Store.objects.get(name = store_name)
-            print('qqqqqqqqqqqqqqqq')
+        if Seller.is_seller(user):
             is_success = False
-        except Exception as e:
-            store = Store.objects.create(name = store_name, presentation = store_presentation)
+        else:
             try:
-                seller = Seller.objects.create(user = user, store = store)
-                is_success = True
-            except:
+                Store.objects.get(name = store_name)
+                print('qqqqqqqqqqqqqqqq')
                 is_success = False
+            except Exception as e:
+                store = Store.objects.create(name = store_name, presentation = store_presentation)
+                try:
+                    seller = Seller.objects.create(user = user, store = store)
+                    is_success = True
+                except:
+                    is_success = False
 
-            print('store')
-            print(e)
+                print('store')
+                print(e)
         print(store_name)
     result = {"is_success": is_success}
     print(result)
