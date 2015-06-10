@@ -82,6 +82,7 @@ def auction(request, goods):
     hightest_price = 0.00
     #订金
     subscription = request.POST['subscription']
+    print(subscription)
     #开始时间
     start_time = request.POST['auction_start_time']
     #结束时间
@@ -104,6 +105,8 @@ def group_buy(request, goods):
     # goods = models.ForeignKey(Goods)
     #团购价
     price = request.POST['group_buy_price']
+    #定金
+    subscription = request.POST['groupbuy_subscription']
     #最少团购数量
     min_num = request.POST['group_buy_sum']
     #开始时间
@@ -115,8 +118,8 @@ def group_buy(request, goods):
     end_time=datetime.datetime.strptime(end_time,TIME_FORM)
 
     try:
-        return GroupBuyingItem.objects.create(goods=goods, price=price, min_num=min_num,
-                                       start_time=start_time, end_time=end_time)
+        return GroupBuyingItem.objects.create(goods=goods, price=price, subscription=subscription, cur_sum=0,
+                                              min_num=min_num,start_time=start_time, end_time=end_time)
     except Exception as e:
         return None
         print(e)

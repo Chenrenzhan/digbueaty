@@ -127,6 +127,8 @@ class AuctionBid(models.Model):
     auction = models.ForeignKey(AuctionItem)
     #出价额
     bid = models.FloatField()
+    #数量
+    sum = models.IntegerField(default=0)
     #是否拍得
     is_succeed = models.BooleanField(default=False)
 
@@ -136,8 +138,12 @@ class GroupBuyingItem(models.Model):
     goods = models.ForeignKey(Goods)
     #团购价
     price = models.FloatField(default=0.00)
+     #定金
+    subscription = models.FloatField(default=0.00)
     #最少团购数量
     min_num = models.IntegerField(default=0)
+    #当前量
+    cur_sum = models.IntegerField(default=0)
     #开始时间
     start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
     #结束时间

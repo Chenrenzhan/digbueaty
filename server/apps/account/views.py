@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext
-# from django.template.context_processors import csrf
+# from django.templates.context_processors import csrf
 from django.middleware import csrf
 
 # Create your views here.
@@ -24,7 +24,7 @@ def signup(request):
 #页面信息处理
 def signup_action(request):
     email = request.POST['email']
-
+    user=None
     if(User.is_inavailable_email(email)):
          # return render_to_response('signup_error',{'error': User.REPEATED_EMAIL},context_instance=RequestContext(request))
         return HttpResponseRedirect('/account/signup/error')
@@ -38,7 +38,7 @@ def signup_action(request):
     request.session['mail'] = user.mail;
 
     #跳转到首页
-    return HttpResponseRedirect('/index/')
+    return HttpResponseRedirect('/index/' + str(user.id) + '/')
     # return render_to_response('/index/',context_instance=RequestContext(request))
 
 #注册错误页面
@@ -58,12 +58,14 @@ def login_action(request):
 
     try:
         user = User.objects.get(mail = email)
+        print(user)
         if(password == user.password):
             request.session['mail'] = user.mail
-            return HttpResponseRedirect('/index/')
+            return HttpResponseRedirect('/index/' + str(user.id) + '/')
         else:
             return HttpResponseRedirect('/account/login/error')
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponseRedirect('/account/login/error')
 
 
@@ -77,4 +79,4 @@ def logout(request):
 
     if 'mail' in request.session:
         del request.session['mail']
-    return render_to_response('login.html',context_instance=RequestContext(request))
+    return HttpResponseRedirect('/account/login/')

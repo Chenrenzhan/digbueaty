@@ -11,6 +11,8 @@ from models import *
 from market.models import Goods, PicSet,YiKouJiaItem, AuctionItem, GroupBuyingItem
 from account.models import User, Seller
 
+from server.action import get_header_inform
+
 def store_manage(request, store_id):
 
     if( 'mail' in request.session):
@@ -31,25 +33,7 @@ def store_manage(request, store_id):
     return render_to_response('index.html',context_instance=RequestContext(request))
 
 def store_item(request, store_id):
-    has_store = False
-    seller = None
-    store = None
-    host = request.get_host()
-    print(host)
-    if( 'mail' in request.session):
-        mail = request.session['mail']
-        # del request.session['mail']
-        user = User.objects.get(mail=mail)
-        # has_store = Seller.is_seller(user = user)
-        try:
-            seller = Seller.objects.get(user = user)
-            # store = Store.objects.get
-            has_store = True
-        except:
-            has_store = False
-
-    variable=None
-    goods_list=None
+    header_inform = get_header_inform(request)
 
     try:
         store=Store.objects.get(id=store_id)
@@ -87,26 +71,19 @@ def store_item(request, store_id):
 
     except Exception as e:
         print(e)
-    variable = {'user':user, 'has_store': has_store, 'seller': seller,
+    variable = {'user':header_inform['user'], 'has_store': header_inform['has_store'],
+                'seller': header_inform['seller'],'notifys':header_inform['notifys'],
                 'yikoujia_list':yikoujia_list, 'auction_list':auction_list, 'group_buy_list':group_buy_list}
     print(variable)
     return render_to_response('store_item.html', variable, context_instance=RequestContext(request))
 
 
 def add_item(request, store_id):
-    if( 'mail' in request.session):
-        mail = request.session['mail']
-        user = User.objects.get(mail=mail)
+    header_inform = get_header_inform(request)
 
-        try:
-            seller = Seller.objects.get(user = user)
-            # store = Store.objects.get
-            has_store = True
-        except:
-            has_store = False
-        print(user.uname)
-
-        variable = {'user':user, 'has_store': has_store, 'seller': seller,'store_id':store_id}
+    variable = {'user':header_inform['user'], 'has_store': header_inform['has_store'],
+                 'seller': header_inform['seller'],'notifys':header_inform['notifys'],
+                'store_id':store_id}
 
     return render_to_response('store_additem.html', variable, context_instance=RequestContext(request))
 
@@ -134,7 +111,7 @@ def add_item_action(request,store_id):
     except Exception as e:
         print(e)
     try:
-        goods = Goods.objects.create(store=store, title=title, remain=remain, detail=detail,is_sold_out=False,
+        goods = Goods.objects.create(store=store, title=title, remain=remain, detail=detail, is_sold_out=False,
                              price=price, goods_type=good_type)
         sort_goods(request, goods, type_list)
     except Exception as e:
@@ -151,46 +128,38 @@ def add_item_action(request,store_id):
 
 def edit_item(request, store_id, item_id):
 
-    if( 'mail' in request.session):
-        mail = request.session['mail']
-        user = User.objects.get(mail=mail)
+    header_inform = get_header_inform(request)
 
+
+    goods=None
+    pic=None
+    yikoujia=None
+    auction=None
+    group_buy=None
+    try:
+        goods = Goods.objects.get(id=item_id)
+        pic = PicSet.objects.get(goods=goods)
         try:
-            seller = Seller.objects.get(user = user)
-            # store = Store.objects.get
-            has_store = True
+             yikoujia=YiKouJiaItem.objects.get(goods=goods)
         except:
-            has_store = False
-        print(user.uname)
-
-
-        goods=None
-        pic=None
-        yikoujia=None
-        auction=None
-        group_buy=None
+            pass
         try:
-            goods = Goods.objects.get(id=item_id)
-            pic = PicSet.objects.get(goods=goods)
-            try:
-                yikoujia=YiKouJiaItem.objects.get(goods=goods)
-            except:
-                pass
-            try:
-                auction=AuctionItem.objects.get(goods=goods)
-            except:
-                pass
-            try:
-                group_buy=GroupBuyingItem.objects.get(goods=goods)
-            except:
-                pass
-        except Exception as e:
-            print(e)
+            auction=AuctionItem.objects.get(goods=goods)
+        except:
+            pass
+        try:
+            group_buy=GroupBuyingItem.objects.get(goods=goods)
+        except:
+            pass
+    except Exception as e:
+        print(e)
 
 
-        variable = {'user':user, 'has_store': has_store, 'seller': seller,'store_id':store_id,
-                    'goods':goods,'pic':pic,'yikoujia':yikoujia, 'auction':auction, 'group_buy':group_buy}
-        print(variable)
+    variable = {'user':header_inform['user'], 'has_store': header_inform['has_store'],
+                'seller': header_inform['seller'],'notifys':header_inform['notifys'],
+                'store_id':store_id,'goods':goods,'pic':pic,'yikoujia':yikoujia,
+                'auction':auction, 'group_buy':group_buy}
+    print(variable)
 
     return render_to_response('store_edititem.html', variable, context_instance=RequestContext(request))
 
@@ -220,7 +189,7 @@ def edit_item_action(request, store_id, item_id):
         goods.detail=detail
         goods.price=price
         goods.remain=remain
-        goods.update()
+        goods.save()
         # sort_goods(request, goods, type_list)
     except Exception as e:
         print(e)

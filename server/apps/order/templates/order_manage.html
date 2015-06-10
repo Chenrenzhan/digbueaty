@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <style type="text/css">
+        .item_pic{
+            box-sizing: border-box;
+            width: 100%;
+            height: auto !important;
+            text-align: start;
+            border: 0.3em solid white;
+            -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
+            -moz-box-shadow: 0.2em 0.2em 0.5em #666;
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .header{
+            border-bottom: 3px solid #b2d1ff;
+            /*border-left: 2px solid #b2d1ff;*/
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            margin-left: 5px;
+            font-size: 1.2em;
+            padding-bottom: 5px;;
+        }
+        .item{
+            margin-left: 5px;
+        }
+        .btn_item
+        {
+            border-radius: 5px;
+            font-size:12px;
+            text-align:center;
+            padding:0px;
+            vertical-align:middle ;
+            line-height:22px;
+            margin:0px;
+            Height:26px;
+            Width:60px;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<!-- ========== CONTENT START ========== -->
+
+<section id="content">
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="/index/{{user.id}}">首页</a></li>
+            <!--<li><a href="#">店铺管理</a></li>-->
+            <li>我的订单</li>
+        </ol>
+
+        <div class="row" id="store_manage" >
+            <div class="col-sm-3 sidebar" id="directory_tree" >
+                <aside class="widget widget_product_categories">
+                    <h3 class="widget-title">订单管理</h3>
+                    <ul>
+                        <li><a href="#buy_order">买入订单</a></li>
+                        {% if has_store %}
+                            <li><a href="#sell_order">卖出订单</a></li>
+                        {% endif %}
+
+
+                        <!--<li><a href="#">商品管理</a></li>-->
+                        <!--<li><a href="#">添加商品</a></li>-->
+                    </ul>
+                </aside>
+            </div>
+
+
+            <div class="col-sm-9" >
+
+                <ul class="products row">
+
+                    <div id="buy_order" style="position: static">
+                        <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">买入订单</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow: hidden; margin-left: 15px;margin-right: 15px;">
+                            <!--<div style="margin-top: 50px;"><h3>确认订单信息</h3></div>-->
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="header col-sm-6" style="width: 45%;border-left: none;">店铺宝贝</div>
+                                <div class="header col-sm-2" style="width: 10%">单价</div>
+                                <div class="header col-sm-2" style="width: 10%">数量</div>
+                                <div class="header col-sm-2" style="width: 10%">总计</div>
+                                <div class="header col-sm-2" style="width: 10%">付款</div>
+                                <div class="header col-sm-2" style="width: 10%">发货</div>
+                            </div>
+                            {% for buy_order in buy_orders %}
+                            <div class="row" style="text-align: center;margin-top: 20px;">
+                                <div class="col-sm-6 item" style="width: 45%">
+                                    <div class="col-sm-3" style="height: 60px;overflow: hidden;">
+                                        <img  src="{{buy_order.pic.picUrl.url}}" alt="" style="width: 100%;">
+                                    </div>
+                                    <div class="col-sm-9" style="overflow: hidden;padding-top: 0px;text-align: left">
+                                        <span style="padding-top: 0px;"><h3>{{buy_order.goods.title}}</h3></span>
+                                        <span>{{buy_order.goods.detail}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span>{{buy_order.price}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span>{{buy_order.sum}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span>{{buy_order.total}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <input type="hidden" value="{{buy_order.total}}" class="input_total"/>
+                                    <input type="hidden" value="{{buy_order.order.id}}" class="input_order_id"/>
+                                    {% if buy_order.order.bill.has_payed %}
+                                        <button type="button" class="btn btn-info btn_item btn_pay" disabled="disabled">已付款</button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-info btn_item btn_pay"> 未付款</button>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <button type="button" class="btn btn-default btn_item btn_delivery" disabled="disabled">
+                                        {% if buy_order.order.has_deliver %}
+                                            已发货
+                                        {% else %}
+                                            未发货
+                                        {% endif %}
+                                    </button>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+                    {% if has_store %}
+                     <div id="sell_order" style="position: static">
+                        <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">卖出订单</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="overflow: hidden; margin-left: 15px;margin-right: 15px;">
+                            <!--<div style="margin-top: 50px;"><h3>确认订单信息</h3></div>-->
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="header col-sm-6" style="width: 45%;border-left: none;">店铺宝贝</div>
+                                <div class="header col-sm-2" style="width: 10%">单价</div>
+                                <div class="header col-sm-2" style="width: 10%">数量</div>
+                                <div class="header col-sm-2" style="width: 10%">总计</div>
+                                <div class="header col-sm-2" style="width: 10%">付款</div>
+                                <div class="header col-sm-2" style="width: 10%">发货</div>
+                            </div>
+                            {% for sell_order in sell_orders %}
+                            <div class="row" style="text-align: center;margin-top: 20px;">
+                                <div class="col-sm-6 item" style="width: 45%">
+                                    <div class="col-sm-3" style="height: 60px;overflow: hidden;">
+                                        <img  src="{{sell_order.pic.picUrl.url}}" alt="" style="width: 100%;">
+                                    </div>
+                                    <div class="col-sm-9" style="overflow: hidden;padding-top: 0px;text-align: left">
+                                        <span style="padding-top: 0px;"><h3>{{sell_order.goods.title}}</h3></span>
+                                        <span>{{sell_order.goods.detail}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span>{{sell_order.price}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span>{{sell_order.sum}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <span class="total">{{sell_order.total}}</span>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <input type="hidden" value="{{sell_order.total}}" />
+                                    <button type="button" class="btn btn-default btn_item btn_pay" disabled="disabled">
+                                        {% if sell_order.order.bill.has_payed %}
+                                            已付款
+                                        {% else %}
+                                            未付款
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                <div class="col-sm-2 item" style="width: 10%">
+                                    <input type="hidden" value="{{sell_order.order.id}}" class="input_order_id"/>
+                                    {% if sell_order.order.has_deliver %}
+                                        <button type="button" class="btn btn-info btn_item btn_delivery" disabled="disabled">已发货</button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-info btn_item btn_delivery"> 未发货</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<div id="modal_pay">
+    <div id="payment" class="modal fade " role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h2 class="modal-title" id="gridSystemModalLabel">付款</h2>
+                </div>
+                <div class="modal-body" style="font-size: 1.5em;">
+                    <div>
+                        账户余额：<span>{{user.balance}}</span>
+                    </div>
+                    <div>
+                        实付金额：<span id="total">{{total}}</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="ok" type="button" class="btn btn-info" data-dismiss="modal">确认付款</button>
+                    <button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">稍后再付</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- ========== CONTENT END ========== -->
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+$(function(){
+    $("body").append($("#modal_pay").html());
+    $("#modal_pay").remove();
+});
+
+//侧栏随屏幕滚动固定
+$(function(){
+    var parentDivHeight = 0;
+    var topPadding = 100;
+    $(function() {
+        var offset = $("#directory_tree").offset();
+        $(window).scroll(function() {
+            parentDivHeight = $("#directory_tree").parent("div").height();//alert(parentDivHeight);
+            var sideBarHeight = $("#directory_tree").height();
+            if ($(window).scrollTop() > offset.top) {
+                var newPosition = ($(window).scrollTop() - offset.top) + topPadding;
+                var maxPosition = parentDivHeight - (sideBarHeight);
+                if (newPosition > maxPosition) {
+                    newPosition = maxPosition;
+                }
+                $("#directory_tree").stop().animate({
+                    marginTop: newPosition,
+                    speed: 'slow'
+                });
+            } else {
+                $("#directory_tree").stop().animate({
+                    marginTop: 0,
+                    speed: 'slow'
+                });
+            };
+        });
+    });
+});
+
+$(function(){
+    $(".item_pic_div").each(function(index){
+        var width =  $(this).width();
+        var height = width * 1.2;
+        $(this).height(height);
+    });
+});
+
+$(function(){
+    $(".btn_pay").click(function(){
+        var btn_obj = $(this);
+        var total = $(this).parent().children("input")[0].value;
+        var order_id = $(this).parent().children("input")[1].value;
+        $("#total").html(total);
+        $("#payment").modal();
+
+        var user_id = $("#user_id").val();
+        url = "/order/" + user_id + "/pay/" + order_id + "/";
+        $("#ok").click(function(){
+            $.get(
+                    url,
+                    function (data, textStatus){
+                        location.reload(true);
+                    }
+            );
+        });
+    });
+
+    $(".btn_delivery").click(function(){
+        var order_id = $(this).parent().children("input")[0].value;
+
+        url = "/order/delivery/" + order_id + "/";
+        $.get(
+                url,
+                function (data, textStatus){
+                    location.reload(true);
+                }
+        );
+    });
+});
+
+
+</script>
+
+{% endblock %}

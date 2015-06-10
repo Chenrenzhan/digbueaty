@@ -16,6 +16,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
 
 
     <!--[if lt IE 9]>
@@ -24,7 +25,51 @@
     <![endif]-->
     {% load staticfiles %}
     <script src="{% static "js/modernizr.custom.63321.js" %}"></script>
-<!-- <script> </script> -->
+    <!-- <script> </script> -->
+
+
+    <style type="text/css">
+        .item_pic{
+            box-sizing: border-box;
+            width: 100%;
+            height: auto !important;
+            text-align: start;
+            border: 0.3em solid white;
+            -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
+            -moz-box-shadow: 0.2em 0.2em 0.5em #666;
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .panel-heading{
+            height: 30px;;
+        }
+        .panel-title{
+            margin-top: -4px;;
+        }
+
+        .panel-label{
+            height: 15px; width: 15px; margin-top: -5px;
+        }
+
+        .panel-input{
+            margin-top: 1px;
+        }
+
+        .glyphicon-star{
+            color: #d58512;
+        }
+
+        .header{
+            border-bottom: 3px solid #b2d1ff;
+            /*border-left: 2px solid #b2d1ff;*/
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            font-size: 1.2em;
+            padding-bottom: 5px;;
+        }
+    </style>
 
 </head>
 <body>
@@ -40,11 +85,12 @@
             <nav id="language-selector">
                 <ul class="nav nav-pills">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
+                        <span id="mail" style="display: none;">{{ user.mail }} </span>
                         <ul role="menu" class="dropdown-menu">
-                            <li><a href="#">German</a></li>
-                            <li><a href="#">Spanish</a></li>
-                            <li><a href="#">Italian</a></li>
+                            <li><a href="/account/logout/">退出</a></li>
+                            <!--<li><a href="#">Spanish</a></li>-->
+                            <!--<li><a href="#">Italian</a></li>-->
                         </ul>
                     </li>
                 </ul>
@@ -76,18 +122,18 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">好友<span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">小组<span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
@@ -95,19 +141,22 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">卖家中心<span class="caret"></span></a>
                             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                {% if has_store %}
+                                    <li><a id="my_store"  href="/store/{{ seller.store.id }}/">我的店</a></li>
+                                {% else %}
+                                    <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
+                                {% endif %}
                             </ul>
                         </li>
+
 
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<span class="caret"></span></a>
                             <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="#">German</a></li>
-                                <li><a href="#">Spanish</a></li>
-                                <li><a href="#">Italian</a></li>
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
                             </ul>
                         </li>
 
@@ -137,55 +186,6 @@
                     </div>
 
                     <div class="col-sm-6">
-
-                        <div class="navbar-collapse collapse main-nav">
-                            <ul class="nav navbar-nav navbar-right">
-
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">首页</a>
-                                </li>
-
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">一口价 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Home #1 / Slider</a></li>
-                                        <li><a href="#">Home #2 / Categories</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">团购 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu" >
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">众筹 <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Subcat #1</a></li>
-                                        <li><a href="#">Subcat #2</a></li>
-                                        <li><a href="#">Subcat #3</a></li>
-                                        <li><a href="#">Subcat #4</a></li>
-                                    </ul>
-                                </li>
-
-                            </ul>
-                        </div>
-
                     </div>
 
                     <!--<div class="row">-->
@@ -196,11 +196,11 @@
                                     <!--<span style="position: relative">-->
                                     <div style="line-height: 40px;height: 40px;margin-top: 9%; width: 100%">
                                         <label class="sr-only" for="search">Email address</label>
-                                        <input type="text" class="form-control" placeholder="Search for..." id="search"  style="width: 100%;">
+                                        <input type="text" class="form-control" placeholder="搜索..." id="search"  style="width: 100%;">
                                         <!--</span>-->
-        <span class="input-group-btn" >
-        <button class="btn btn-default" type="button" >Go!</button>
-      </span>
+                                        <span class="input-group-btn" >
+                                            <button class="btn btn-default" type="button" >Go!</button>
+                                        </span>
                                     </div>
                                 </div><!-- /input-group -->
                             </ul>
@@ -216,11 +216,38 @@
 <!-- ========== MENU END ========== -->
 
 
-<br>
-fdfdfd
-<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+<!-- ========== CONTENT START ========== -->
 
-<br>
+<section id="content">
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="/index/{{user.id}}">首页</a></li>
+            <!--<li><a href="#">店铺管理</a></li>-->
+            <li>付款</li>
+        </ol>
+
+        <form action="action/" method="post" enctype="multipart/form-data" target="_self">
+            {% csrf_token %}
+
+
+
+            <hr />
+
+            <div style="text-align: center;">
+                <input class="btn btn-info btn-lg" id="submit_order" value="提交订单" type="submit">
+            </div>
+
+        </form>
+
+
+        <!--<hr />-->
+    </div>
+</section>
+
+
+<!-- ========== CONTENT END ========== -->
+
 
 
 <!-- ========== FOOTER START ========== -->
@@ -284,6 +311,10 @@ fdfdfd
 
 <!-- ========== FOOTER END ========== -->
 
+
+
+
+
 <div id="cart-panel" class="panel panel-right" >
     <aside class="widget_shopping_cart">
         <h3>Shopping Cart</h3>
@@ -313,7 +344,7 @@ fdfdfd
         <p class="total"><strong>Subtotal:</strong> <span class="amount">$36.00</span></p>
         <p class="buttons">
             <a class="btn btn-default btn-lg btn-block" href="#">View Cart</a>
-            <a class="btn btn-primary btn-lg btn-block" href="#">Checkout</a>
+            <a class="btn btn-info btn-lg btn-block" href="#">Checkout</a>
         </p>
     </aside>
 </div>
@@ -328,22 +359,93 @@ fdfdfd
 <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <!--<script src="../../../statics/js/owl.carousel.min.js"></script>-->
 <script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>
+<script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 {% load staticfiles %}
 <script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>
+<!--<script src="{% static "js/jquery.js" %}"></script>-->
+
+
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
+<script src="{% static "js/uploadPreview.min.js" %}"></script>
+<!--<script src="{% static "js/simpleZoom.js" %}"></script>-->
+
+
+<!--<script src="{% static "js/bootstrap-collapse.js" %}"></script>-->
 
 <!--<script src="{% static "js/jquery.catslider.js" %}"></script>-->
-<!--<script src="../../../statics/js/main.js"></script>-->
 
 
 <script>
-    jQuery(document).ready(function($){
-        var cartPanel = $.jPanelMenu({
-            menu: '#cart-panel',
-            trigger: '#shopping-cart a'
-        });
 
-        cartPanel.on();
+
+$(function(){
+    $("#sub").click(function(){
+
+        var sum = parseInt($("#sum").val());
+        if(sum > 0){
+            --sum;
+        }
+        else{
+            sum = 0;
+        }
+
+        $("#sum").val(sum);
     });
+    $("#add").click(function(){
+        var remail = parseInt($("#remail").html());
+        var sum = parseInt($("#sum").val());
+        if(sum < remail)
+            sum++;
+
+        $("#sum").val(sum);
+    });
+});
+
+
+
+
+
+   function ajaxjson(information){
+console.log(information);
+    //django需要带上csrftoken
+    var csrftoken = $.cookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    console.log("sasasaaaaaaaaaaaaaaaaaaad")
+    $.ajax({
+        url:"http://127.0.0.1:8000/usercenter/applystore/", //getBaseURL()+"/RequestAjaxPerInfo/",
+        data:{"information":JSON.stringify(information)},
+        async:true,
+        dataType:"json",
+        type:"POST",
+        success:function(result) {
+            console.log(result);
+
+            var is_success = result.is_success;
+            if(is_success){
+                alert("申请开店成功");
+                location.reload(true);
+                return true;
+            }
+            else{
+                alert("该店铺已经已经被注册,请重新申请");
+                return false;
+            }
+        }
+
+    });
+}
 </script>
 
 </body>

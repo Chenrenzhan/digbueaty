@@ -2,22 +2,7 @@
 
 {% block css %}
     <style type="text/css">
-        /*@media (max-width: 500px) {*/
-             /*#directory_tree{*/
-                /*position: static;*/
-                /*top:0px;*/
-            /*}*/
-        /*}*/
-        /*@media (max-width: 1200px) {*/
-             /*#directory_tree{*/
-                /*position: relative;*/
-                /*top:0px;*/
-            /*}*/
-        /*}*/
-/*#directory_tree{*/
-                /*position: relative;*/
-                /*top:0px;*/
-            /*}*/
+
         .item_pic{
             box-sizing: border-box;
             width: 100%;
@@ -46,7 +31,10 @@
     </style>
 {% endblock %}
 
+
+
 {% block content %}
+
 <!-- ========== CONTENT START ========== -->
 
 <section id="content">
@@ -54,24 +42,23 @@
 
         <ol class="breadcrumb">
             <li><a href="/index/{{user.id}}">首页</a></li>
-            <li>店铺管理</li>
+            <!--<li><a href="#">店铺管理</a></li>-->
             <!--<li>添加商品</li>-->
         </ol>
 
         <div class="row" id="store_manage" >
             <div class="col-sm-3 sidebar" id="directory_tree" >
                 <aside class="widget widget_product_categories">
-                    <h3 class="widget-title">店铺管理</h3>
+                    <h3 class="widget-title">商品分类</h3>
                     <ul>
                         <li><a href="#yikoujia_div">一口价商品</a></li>
                         <li><a href="#auction_div">竞拍商品</a></li>
                         <li><a href="#group_buy_div">团购商品</a></li>
                         <!--<li><a href="#">商品管理</a></li>-->
-                        <li><a href="/store/{{ seller.store.id }}/add/item/">添加商品</a></li>
+                        <!--<li><a href="#">添加商品</a></li>-->
                     </ul>
                 </aside>
             </div>
-
 
 
             <div class="col-sm-9" >
@@ -80,23 +67,30 @@
 
                     <div id="yikoujia_div" style="position: static">
                         <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
-                            <h3 style="margin-left: 15px;color: #ffffff">一口价商品</h3>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">一口价商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
                         </div>
                         <div style="overflow: hidden">
                             {% for yikoujia in yikoujia_list %}
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{yikoujia.item.goods.id}}/" >
+                                        <a href="/market/item/yikoujia/1/{{yikoujia.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ yikoujia.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{yikoujia.item.goods.id}}/" class="add-to-cart" title="修改商品信息">
-                                      <span class="fa-stack fa-2x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-pencil  fa-stack-1x fa-inverse"></i>
-                                      </span>
+                                        <a href="/market/item/yikoujia/1/{{yikoujia.item.goods.id}}" class="add-to-cart" title="立即购买">
+                                          <span class="fa-stack fa-2x">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                                          </span>
                                         </a>
                                     </div>
                                     <hr>
@@ -117,7 +111,14 @@
 
                     <div id="auction_div" style="position: static">
                         <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
-                            <h3 style="margin-left: 15px;color: #ffffff">竞拍商品</h3>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">竞拍商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div style="overflow: hidden">
@@ -125,15 +126,15 @@
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{auction.item.goods.id}}/" >
+                                        <a href="/market/item/auction/2/{{auction.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ auction.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{auction.item.goods.id}}/" class="add-to-cart" title="修改商品信息">
+                                        <a href="/market/item/auction/2/{{auction.item.goods.id}}" class="add-to-cart" title="立即购买">
                                       <span class="fa-stack fa-2x">
                                         <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-pencil  fa-stack-1x fa-inverse"></i>
+                                        <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
                                       </span>
                                         </a>
                                     </div>
@@ -147,11 +148,21 @@
                                         <p>开始：{{ auction.item.start_time|date:"Y-m-d H:i:s" }}</p>
                                         <p>截止：{{ auction.item.end_time|date:"Y-m-d H:i:s" }}</p>
                                     </div>
-                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
-                                        <p>底价：{{ auction.item.base_price }}</p>
+                                    <div class="row" >
+                                        <div class="col-sm-5">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>底价：<span>{{ auction.item.base_price }}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>定金：<span>{{ auction.item.subscription }}</span></span>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="">
-                                        <span class="price">当前价：￥{{auction.item.hightest_price}}</span>
+                                        <span class="price">当前价：￥<span>{{auction.item.hightest_price}}</span></span>
                                     </div>
                                     <!--<div class="">-->
                                         <!--<span class="price">￥{{auction.item.goods.price}}</span>-->
@@ -166,7 +177,14 @@
 
                      <div id="group_buy_div" style="position: static">
                         <div style="height: 40px;margin: 15px;margin-top: 0;background-color: #565656;border-radius: 5px;padding-top: 5px;">
-                            <h3 style="margin-left: 15px;color: #ffffff">团购商品</h3>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 style="margin-left: 15px;color: #ffffff">团购商品</h3>
+                                </div>
+                                <div class="col-sm-6" style="text-align: right;">
+                                    <span style="margin-right: 20px;"><a href="#">更多>></a></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div style="overflow: hidden">
@@ -174,15 +192,15 @@
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{group_buy.item.goods.id}}/" >
+                                        <a href="/market/item/groupbuy/3/{{group_buy.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ group_buy.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="/store/{{seller.store.id}}/edit/item/{{group_buy.item.goods.id}}/" class="add-to-cart" title="修改商品信息">
+                                        <a href="/market/item/groupbuy/3/{{group_buy.item.goods.id}}" class="add-to-cart" title="立即购买">
                                           <span class="fa-stack fa-2x">
                                             <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-pencil  fa-stack-1x fa-inverse"></i>
+                                            <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
                                           </span>
                                         </a>
                                     </div>
@@ -196,11 +214,23 @@
                                         <p>开始：{{ group_buy.item.start_time|date:"Y-m-d H:i:s" }}</p>
                                         <p>截止：{{ group_buy.item.end_time|date:"Y-m-d H:i:s" }}</p>
                                     </div>
-                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
-                                        <p>至少数量：{{ group_buy.item.min_sum }}</p>
+                                    <!--<div class="min_sum" style="width:90%;margin-left: 15px;">-->
+                                        <!--<p>至少数量：{{group_buy.item.min_num}}</p>-->
+                                    <!--</div>-->
+                                    <div class="row" style="padding: 0px;">
+                                        <div class="col-sm-6" >
+                                            <div class="min_sum" style=";margin-left: 15px;">
+                                                <span>至少量：<span>{{ group_buy.item.min_num }}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>定金：<span>{{ group_buy.item.subscription }}</span></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="">
-                                        <span class="price">团购价：￥{{group_buy.item.goods.price}}</span>
+                                        <span class="price">团购价：￥<span>{{group_buy.item.goods.price}}</span></span>
                                     </div>
                                 </div>
                                 <!--</div>-->
@@ -212,18 +242,7 @@
 
                 </ul>
 
-                <!--<ul class="pagination">-->
-                    <!--<li><a href="#">&laquo;</a></li>-->
-                    <!--<li><a href="#">1</a></li>-->
-                    <!--<li><a href="#">2</a></li>-->
-                    <!--<li><a href="#">3</a></li>-->
-                    <!--<li><a href="#">4</a></li>-->
-                    <!--<li><a href="#">5</a></li>-->
-                    <!--<li><a href="#">&raquo;</a></li>-->
-                <!--</ul>-->
-
             </div>
-
 
         </div>
 
@@ -235,12 +254,8 @@
 
 
 {% block js %}
-<script>
 
-//$("#auction_start_time").datetimepicker();
-//$('#auction_end_time').datetimepicker();
-//$("#group_buy_start_time").datetimepicker();
-//$('#group_buy_end_time').datetimepicker();
+<script>
 
 //侧栏随屏幕滚动固定
 $(function(){
@@ -274,20 +289,11 @@ $(function(){
 $(function(){
     $(".item_pic_div").each(function(index){
         var width =  $(this).width();
-        var height = width * 1.2;
+        var height = width * 1;
         $(this).height(height);
-//        var item_height=$(".item_pic").eq(index).height();
-//        if(item_height > height){
-//            $(".item_pic").eq(index).height(height);
-//        }
     });
 });
 
-//    $(function(){
-//        $("#item_pic").click = $("#upload_image").click();
-//
-//        new uploadPreview({ UpBtn: "upload_image", DivShow: "item_pic_div", ImgShow: "item_pic" });
-//    })
-
 </script>
+
 {% endblock %}

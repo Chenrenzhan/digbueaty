@@ -1,50 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Garbini</title>
-
-    <!-- Bootstrap -->
-    {% load staticfiles %}
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.css" rel="stylesheet">
-    <link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.theme.min.css" rel="stylesheet">
-    <link href="http://cdn.bootcss.com/owl-carousel/1.3.3/owl.transitions.min.css" rel="stylesheet">
-
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
-    <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
-    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
+{% extends "noaccount_base.html" %}
 
 
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-
-    <![endif]-->
-    {% load staticfiles %}
-    <script src="{% static "js/modernizr.custom.63321.js" %}"></script>
-    <!-- <script> </script> -->
-
-
+{% block css %}
     <style type="text/css">
-        /*@media (max-width: 500px) {*/
-             /*#directory_tree{*/
-                /*position: static;*/
-                /*top:0px;*/
-            /*}*/
-        /*}*/
-        /*@media (max-width: 1200px) {*/
-             /*#directory_tree{*/
-                /*position: relative;*/
-                /*top:0px;*/
-            /*}*/
-        /*}*/
-/*#directory_tree{*/
-                /*position: relative;*/
-                /*top:0px;*/
-            /*}*/
         .item_pic{
             box-sizing: border-box;
             width: 100%;
@@ -71,240 +29,17 @@
             margin-top: 1px;
         }
     </style>
-
-</head>
-<body>
-
-<!-- Header -->
-<header id="header">
-
-    <!-- ========== TOP BAR START ========== -->
-
-    <div id="top-bar">
-        <div class="container">
-
-            <nav id="language-selector">
-                <ul class="nav nav-pills">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
-                        <span id="mail" style="display: none;">{{ user.mail }} </span>
-                        <ul role="menu" class="dropdown-menu">
-                            <li><a href="/account/logout/">退出</a></li>
-                            <!--<li><a href="#">Spanish</a></li>-->
-                            <!--<li><a href="#">Italian</a></li>-->
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-
-            <nav id="shopping-cart">
-                <a href="#">
-                    <i class="fa fa-envelope fa-lg"></i> 消息
-          <span class="fa-stack">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-stack-1x fa-inverse">3</i>
-          </span>
-                </a>
-            </nav>
+{% endblock %}
 
 
-
-            <nav id="top-nav" role="navigation" class="navbar">
-                <div class="navbar-header">
-                    <button data-target=".top-nav" data-toggle="collapse" class="navbar-toggle" type="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse top-nav">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">好友<span class="caret"></span></a>
-                            <ul role="menu" class="dropdown-menu">
-                                <!--<li><a href="#">German</a></li>-->
-                                <!--<li><a href="#">Spanish</a></li>-->
-                                <!--<li><a href="#">Italian</a></li>-->
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">小组<span class="caret"></span></a>
-                            <ul role="menu" class="dropdown-menu">
-                                <!--<li><a href="#">German</a></li>-->
-                                <!--<li><a href="#">Spanish</a></li>-->
-                                <!--<li><a href="#">Italian</a></li>-->
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">卖家中心<span class="caret"></span></a>
-                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
-                            <ul role="menu" class="dropdown-menu">
-                                {% if has_store %}
-                                    <li><a id="my_store"  href="/store/{{ seller.store.id }}/">我的店</a></li>
-                                {% else %}
-                                    <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
-                                {% endif %}
-                            </ul>
-                        </li>
-
-                        <!-- 申请开店 -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <form id="apply_store_form" method="post" action="http://127.0.0.1:8000/usercenter/applystore/">
-                                {% csrf_token %}
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="exampleModalLabel" >申请开店</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!--<form method="post" action="http://127.0.0.1:8000/uercenter/applystore/">-->
-                                            <div class="form-group">
-                                                <label for="store-name" class="control-label" >店名:</label>
-                                                <input type="text" class="form-control" id="store-name" name="store_name" placeholder="您店名,不可重复">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="store-presentation" class="control-label">店铺描述:</label>
-                                                <textarea class="form-control" id="store-presentation" name="store_presentation" placeholder="请简要描述您的店铺"></textarea>
-                                            </div>
-                                        <!--</form>-->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary " data-dismiss="modal" id="applystore_submit"> <!--onClick="apply_store_form.submit()" -->
-                                        确认</button>
-                                        <button type="button" class="btn btn-default">取消</button>
-                                    </div>
-                                </div>
-                            </div>
-                                </form>
-                        </div><!-- /.modal -->
-                        <!--</div>&lt;!&ndash; /.bs-example &ndash;&gt;-->
-
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<span class="caret"></span></a>
-                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
-                            <ul role="menu" class="dropdown-menu">
-                                <!--<li><a href="#">German</a></li>-->
-                                <!--<li><a href="#">Spanish</a></li>-->
-                                <!--<li><a href="#">Italian</a></li>-->
-                            </ul>
-                        </li>
-
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </nav>
-        </div>
-    </div><!-- / #top-bar -->
-
-    <!-- ========== TOP BAR START ========== -->
-
-    <!-- ========== MENU START ========== -->
-
-    <nav id="main-nav">
-        <div class="navbar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-nav">
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <a class="navbar-brand" href="/index/"><h1>淘美人</h1></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-
-                        <!--<div class="navbar-collapse collapse main-nav">-->
-                            <!--<ul class="nav navbar-nav navbar-right">-->
-
-                                <!--&lt;!&ndash;<li class="dropdown">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<a href="#" class="dropdown-toggle" data-toggle="dropdown">首页</a>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
-
-                                <!--<li class="dropdown">-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">一口价 </a>-->
-                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Home #1 / Slider</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Home #2 / Categories</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-                                <!--</li>-->
-
-                                <!--<li class="dropdown">-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">团购 </a>-->
-                                    <!--&lt;!&ndash;<ul class="dropdown-menu" >&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-                                <!--</li>-->
-
-                                <!--<li class="dropdown">-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">竞拍 </a>-->
-                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-                                <!--</li>-->
-
-                                <!--<li class="dropdown">-->
-                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">众筹 </a>-->
-                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #1</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #2</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #3</a></li>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<li><a href="#">Subcat #4</a></li>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-                                <!--</li>-->
-
-                            <!--</ul>-->
-                        <!--</div>-->
-
-                    </div>
-
-                    <!--<div class="row">-->
-                    <div class="col-lg-4">
-                        <div class="navbar-collapse collapse main-nav">
-                            <ul class="nav navbar-nav navbar-right" style="width: 100%;">
-                                <div class="input-group" style="padding-top: 0px;padding-bottom: 0px;line-height: 80px;height: 80px;width: 80%;align-items: flex-end">
-                                    <!--<span style="position: relative">-->
-                                    <div style="line-height: 40px;height: 40px;margin-top: 9%; width: 100%">
-                                        <label class="sr-only" for="search">Email address</label>
-                                        <input type="text" class="form-control" placeholder="搜索..." id="search"  style="width: 100%;">
-                                        <!--</span>-->
-                                        <span class="input-group-btn" >
-                                            <button class="btn btn-default" type="button" >Go!</button>
-                                        </span>
-                                    </div>
-                                </div><!-- /input-group -->
-                            </ul>
-                        </div><!-- /.col-lg-6 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-</header>
-
-<!-- ========== MENU END ========== -->
-
-
+{% block content %}
 <!-- ========== CONTENT START ========== -->
 
 <section id="content">
     <div class="container">
 
         <ol class="breadcrumb">
-            <li><a href="#">首页</a></li>
+            <li><a href="/index/">首页</a></li>
             <!--<li><a href="#">店铺管理</a></li>-->
             <!--<li>添加商品</li>-->
         </ol>
@@ -322,15 +57,6 @@
                     </ul>
                 </aside>
             </div>
-
-    <!--数码电子-->
-    <!--家电-->
-    <!--服装-->
-    <!--生活-->
-    <!--书籍-->
-    <!--其他-->
-
-
 
             <div class="col-sm-9" >
 
@@ -352,16 +78,16 @@
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="product.html" >
+                                        <a href="/market/noaccount/item/yikoujia/1/{{yikoujia.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ yikoujia.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="#" class="add-to-cart" title="立即购买">
-                                      <span class="fa-stack fa-2x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
-                                      </span>
+                                        <a href="/market/noaccount/item/yikoujia/1/{{yikoujia.item.goods.id}}" class="add-to-cart" title="立即购买">
+                                          <span class="fa-stack fa-2x">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
+                                          </span>
                                         </a>
                                     </div>
                                     <hr>
@@ -397,12 +123,12 @@
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="product.html" >
+                                        <a href="/market/noaccount/item/auction/2/{{auction.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ auction.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="#" class="add-to-cart" title="立即购买">
+                                        <a href="/market/noaccount/item/auction/2/{{auction.item.goods.id}}" class="add-to-cart" title="立即购买">
                                       <span class="fa-stack fa-2x">
                                         <i class="fa fa-circle fa-stack-2x"></i>
                                         <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
@@ -419,11 +145,21 @@
                                         <p>开始：{{ auction.item.start_time|date:"Y-m-d H:i:s" }}</p>
                                         <p>截止：{{ auction.item.end_time|date:"Y-m-d H:i:s" }}</p>
                                     </div>
-                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
-                                        <p>底价：{{ auction.item.base_price }}</p>
+                                    <div class="row" >
+                                        <div class="col-sm-5">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>底价：<span>{{ auction.item.base_price }}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>定金：<span>{{ auction.item.subscription }}</span></span>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="">
-                                        <span class="price">当前价：￥{{auction.item.hightest_price}}</span>
+                                        <span class="price">当前价：￥<span>{{auction.item.hightest_price}}</span></span>
                                     </div>
                                     <!--<div class="">-->
                                         <!--<span class="price">￥{{auction.item.goods.price}}</span>-->
@@ -453,12 +189,12 @@
                             <li class="col-sm-4 first">
                                 <div class="product">
                                     <div class="thumbnail">
-                                        <a href="product.html" >
+                                        <a href="/market/noaccount/item/groupbuy/3/{{group_buy.item.goods.id}}" >
                                             <div class="item_pic_div" style="overflow: hidden;">
                                                 <img src="{{ group_buy.pic.picUrl.url }}" alt="">
                                             </div>
                                         </a>
-                                        <a href="#" class="add-to-cart" title="立即购买">
+                                        <a href="/market/noaccount/item/groupbuy/3/{{group_buy.item.goods.id}}" class="add-to-cart" title="立即购买">
                                           <span class="fa-stack fa-2x">
                                             <i class="fa fa-circle fa-stack-2x"></i>
                                             <i class="fa fa-shopping-cart  fa-stack-1x fa-inverse"></i>
@@ -475,11 +211,23 @@
                                         <p>开始：{{ group_buy.item.start_time|date:"Y-m-d H:i:s" }}</p>
                                         <p>截止：{{ group_buy.item.end_time|date:"Y-m-d H:i:s" }}</p>
                                     </div>
-                                    <div class="min_sum" style="width:90%;margin-left: 15px;">
-                                        <p>至少数量：{{ group_buy.item.min_sum }}</p>
+                                    <!--<div class="min_sum" style="width:90%;margin-left: 15px;">-->
+                                        <!--<p>至少数量：{{group_buy.item.min_num}}</p>-->
+                                    <!--</div>-->
+                                    <div class="row" style="padding: 0px;">
+                                        <div class="col-sm-6" >
+                                            <div class="min_sum" style=";margin-left: 15px;">
+                                                <span>至少量：<span>{{ group_buy.item.min_num }}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="min_sum" style="width:90%;margin-left: 15px;">
+                                                <span>定金：<span>{{ group_buy.item.subscription }}</span></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="">
-                                        <span class="price">团购价：￥{{group_buy.item.goods.price}}</span>
+                                        <span class="price">团购价：￥<span>{{group_buy.item.goods.price}}</span></span>
                                     </div>
                                 </div>
                                 <!--</div>-->
@@ -491,15 +239,6 @@
 
                 </ul>
 
-                <!--<ul class="pagination">-->
-                    <!--<li><a href="#">&laquo;</a></li>-->
-                    <!--<li><a href="#">1</a></li>-->
-                    <!--<li><a href="#">2</a></li>-->
-                    <!--<li><a href="#">3</a></li>-->
-                    <!--<li><a href="#">4</a></li>-->
-                    <!--<li><a href="#">5</a></li>-->
-                    <!--<li><a href="#">&raquo;</a></li>-->
-                <!--</ul>-->
 
             </div>
 
@@ -510,141 +249,11 @@
 </section>
 
 <!-- ========== CONTENT END ========== -->
+{% endblock %}
 
 
-
-<!-- ========== FOOTER START ========== -->
-
-<footer id="footer">
-    <div class="container">
-        <hr>
-        <div class="row">
-
-            <div class="col-sm-3 col-sm-offset-1">
-                <aside class="widget widget_nav_menu">
-                    <h3 class="widget-title">淘美人</h3>
-                    <ul>
-                        <li><a href="#">首页</a></li>
-                        <li><a href="#">一口价</a></li>
-                        <li><a href="#">团购</a></li>
-                        <li><a href="#">竞拍</a></li>
-                        <li><a href="#">众筹</a></li>
-                        <li><a href="#">登录/注册</a></li>
-                    </ul>
-                </aside>
-            </div>
-
-            <div class="col-sm-4">
-                <aside class="widget widget_nav_menu">
-                    <h3 class="widget-title">商品</h3>
-                    <ul>
-                        <li><a href="#">数码电子</a></li>
-                        <li><a href="#">家电</a></li>
-                        <li><a href="#">服装</a></li>
-                        <li><a href="#">生活</a></li>
-                        <li><a href="#">书籍</a></li>
-                        <li><a href="#">其他</a></li>
-                    </ul>
-                </aside>
-            </div>
-
-            <div class="col-sm-3">
-                <aside class="widget widget_newsletter">
-                    <h3 class="widget-title">联系我们</h3>
-                    <form action="#" id="newsletter">
-                        <label for="newsletter-email">给我们发邮件</label>
-                        <div class="input-group">
-                            <input type="text" name="newsletter-email" id="newsletter-email" placeholder="Email" class="form-control input-lg">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-lg" type="button"><i class="fa fa-envelope"></i></button>
-                            </span>
-                        </div>
-                    </form>
-                </aside>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="copyright">
-        <div class="container">&copy; Copyright 淘美人 2015 | All Rights Reserved | Designed by <a href="http://github.com/chenrenzhan/digbueaty">chenrenzhan</a></div>
-    </div>
-
-</footer>
-
-<!-- ========== FOOTER END ========== -->
-
-
-
-
-
-<div id="cart-panel" class="panel panel-right" >
-    <aside class="widget_shopping_cart">
-        <h3>Shopping Cart</h3>
-        <ul class="cart_list">
-            <li>
-                <a href="#">
-                    <img alt="" src="http://placehold.it/60x60">
-                    Reshape Panties
-                </a>
-                <span class="quantity">1 × <span class="amount">$12.00</span></span>
-            </li>
-            <li>
-                <a href="#">
-                    <img alt="" src="http://placehold.it/60x60">
-                    Reshape Panties
-                </a>
-                <span class="quantity">1 × <span class="amount">$12.00</span></span>
-            </li>
-            <li>
-                <a href="http://coffeecreamthemes.com/themes/perfekta/wordpress/s/flying-ninja/">
-                    <img alt="" src="http://placehold.it/60x60">
-                    Reshape Panties
-                </a>
-                <span class="quantity">1 × <span class="amount">$12.00</span></span>
-            </li>
-        </ul>
-        <p class="total"><strong>Subtotal:</strong> <span class="amount">$36.00</span></p>
-        <p class="buttons">
-            <a class="btn btn-default btn-lg btn-block" href="#">View Cart</a>
-            <a class="btn btn-primary btn-lg btn-block" href="#">Checkout</a>
-        </p>
-    </aside>
-</div>
-
-
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-<!--<script src="statics/js/bootstrap.min.js"></script>-->
-<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<!--<script src="../../../statics/js/owl.carousel.min.js"></script>-->
-<script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>
-<script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-{% load staticfiles %}
-<script src="{% static "js/jquery.jpanelmenu.min.js" %}"></script>
-<!--<script src="{% static "js/jquery.js" %}"></script>-->
-
-
-<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
-<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
-<script src="{% static "js/uploadPreview.min.js" %}"></script>
-<!--<script src="{% static "js/simpleZoom.js" %}"></script>-->
-
-
-<!--<script src="{% static "js/bootstrap-collapse.js" %}"></script>-->
-
-<!--<script src="{% static "js/jquery.catslider.js" %}"></script>-->
-
-
+{% block js %}
 <script>
-
-//$("#auction_start_time").datetimepicker();
-//$('#auction_end_time').datetimepicker();
-//$("#group_buy_start_time").datetimepicker();
-//$('#group_buy_end_time').datetimepicker();
 
 //侧栏随屏幕滚动固定
 $(function(){
@@ -678,71 +287,10 @@ $(function(){
 $(function(){
     $(".item_pic_div").each(function(index){
         var width =  $(this).width();
-        var height = width * 1.2;
+        var height = width * 1;
         $(this).height(height);
     });
 });
 
-$(function(){
-    $("#applystore_submit").click(function(){
-        store_name = $("#store-name").val();
-        store_presentation = $("#store-presentation").val();
-        mail = $("#mail").html();
-//        alert($("#mail"));
-        if(store_name == ""){
-            alert("您必须得填店名!");
-            return false;
-        }
-        else{
-            var information = {"mail":mail, "store_name" : store_name, "store_presentation": store_presentation};
-            ajaxjson(information);
-        }
-    });
-});
-
-
-
-   function ajaxjson(information){
-console.log(information);
-    //django需要带上csrftoken
-    var csrftoken = $.cookie('csrftoken');
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-    console.log("sasasaaaaaaaaaaaaaaaaaaad")
-    $.ajax({
-        url:"http://127.0.0.1:8000/usercenter/applystore/", //getBaseURL()+"/RequestAjaxPerInfo/",
-        data:{"information":JSON.stringify(information)},
-        async:true,
-        dataType:"json",
-        type:"POST",
-        success:function(result) {
-            console.log(result);
-
-            var is_success = result.is_success;
-            if(is_success){
-                alert("申请开店成功");
-                location.reload(true);
-                return true;
-            }
-            else{
-                alert("该店铺已经已经被注册,请重新申请");
-                return false;
-            }
-        }
-
-    });
-}
 </script>
-
-</body>
-</html>
+{% endblock %}

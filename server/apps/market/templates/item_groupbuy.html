@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <style type="text/css">
+        .item_pic{
+            box-sizing: border-box;
+            width: 100%;
+            height: auto !important;
+            text-align: start;
+            border: 0.3em solid white;
+            -webkit-box-shadow: 0.2em 0.2em 0.5em #666;
+            -moz-box-shadow: 0.2em 0.2em 0.5em #666;
+            box-shadow: 0.2em 0.2em 0.5em #666;
+            cursor: pointer;
+        }
+        .panel-heading{
+            height: 30px;;
+        }
+        .panel-title{
+            margin-top: -4px;;
+        }
+
+        .panel-label{
+            height: 15px; width: 15px; margin-top: -5px;
+        }
+
+        .panel-input{
+            margin-top: 1px;
+        }
+
+        .glyphicon-star{
+            color: #d58512;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+<!-- ========== CONTENT START ========== -->
+
+<section id="content">
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="/index/{{user.id}}">首页</a></li>
+            <!--<li><a href="#">店铺管理</a></li>-->
+            <li>团购商品</li>
+        </ol>
+
+        <!--<form action="buy/" method="post">-->
+        <form action="" method="post" enctype="multipart/form-data" target="_self">
+            {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-5">
+                <div id="item_pic" class="item_pic_div" style="overflow: hidden;">
+                    <img src="{{goods.pic.picUrl.url}}" alt="" style="width: 100%;">
+                </div>
+            </div>
+
+            <div class="col-sm-7 summary entry-summary">
+
+                <h1 class="product_title">{{goods.item.goods.title}}</h1>
+
+
+                <div>
+                    <h3>商品描述</h3>
+                    <p>{{goods.item.goods.detail}}</p>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-6" >
+                        <h2 style="margin-bottom: 0px;">
+                            <span style="font-size: 0.52em;color: #9A9A9A;">团购价：</span>
+                            <sup>￥</sup>
+                            <span cid="groupbuy_price">{{groupbuy.price}}</span>
+                        </h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <h2 style="margin-bottom: 0px;">
+                            <span style="font-size: 0.52em;color: #9A9A9A;">订金：</span>
+                            <sup>￥</sup>
+                            <span id="subscription">{{groupbuy.subscription}}</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6" >
+                        <span style="font-size: 1.18em;">当前量：
+                            <span id="cur_sum" style="font-size: 1.4em;color: #212121;">{{groupbuy.cur_sum}}</span>
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                         <span style="font-size: 1.18em;">至少量：
+                            <span id="min_sum" style="font-size: 1.4em;color: #212121;">{{groupbuy.min_num}}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span style="font-size: 1.2em;">开始时间：
+                            <span id="start_time" style="font-size: 1.4em;color: #212121;">{{groupbuy.start_time |date:"Y-m-d H:i:s"}}</span>
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span style="font-size: 1.2em;">结束时间：
+                            <span id="dead_time" style="font-size: 1.4em;color: #212121;">{{groupbuy.end_time |date:"Y-m-d H:i:s"}}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <div class="" style="float: left; display: inline;margin-right: 10px;">
+                        <span style="font-size: 1.2em">数量：</span>
+                    </div>
+                    <div class="" style="width: 30%;float: left; display: inline;">
+                        <div class="input-group" style="min-width: 100px; ">
+
+                            <div class="btn input-group-addon sub" id="sub">-</div>
+                            <input type="text" class="form-control input-sm flower_sum "  value="1" name="sum" id="sum"
+                                   style="text-align: center">
+                            <div class="btn input-group-addon add" id="add">+</div>
+                        </div>
+                    </div>
+                    <div class="price" style="font-size: 1.2em; float: left; display: inline;margin-left: 10px;">
+                        <span>(库存：<span id="remail">{{goods.item.goods.remain}}</span>)</span>
+                    </div>
+                </div>
+
+
+                <br style="clear: both"/>
+                <br />
+
+                <div class="">
+                    <div style="float: left; display: inline;margin-right: 30px;">
+                        <input type="submit" class="btn btn-info btn-lg" id="groupbuy_now" value="立即团购">
+                    </div>
+                    <div style="float: left; display: inline;margin-right: 10px; font-size: 1.5em;">
+                        <div class="time-item" id="countdown">
+                            <span>倒计时：</span>
+                            <strong id="day_show">0天</strong>
+                            <strong id="hour_show">0时</strong>
+                            <strong id="minute_show">0分</strong>
+                            <strong id="second_show">0秒</strong>
+                        </div><!--倒计时模块-->
+                    </div>
+                </div>
+                <br style="clear: both;"/>
+
+            </div>
+        </div>
+        </form>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs product-tabs">
+            <li class="active"><a href="#description" data-toggle="tab">商品详情</a></li>
+            <li><a href="#reviews" data-toggle="tab">评价 (3)</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="description">
+                <p>{{goods.item.goods.detail}}</p>
+            </div>
+
+            <div class="tab-pane" id="reviews">
+
+                <div id="reviews">
+                    <ol class="commentlist">
+
+                        <li class="comment">
+                            <div class="comment_container">
+                                <img src="http://placehold.it/64x64" class="avatar">
+                                <div class="comment-text">
+                                    <div class="start-rating" >
+                                        <span class="glyphicon glyphicon-star" ></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    </div>
+                                    <h5 class="meta">用户1 <span>&mdash; 2015-5-1 12:00</span></h5>
+                                    <p>还可以还可以</p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="comment">
+                            <div class="comment_container">
+                                <img src="http://placehold.it/64x64" class="avatar">
+                                <div class="comment-text">
+                                    <div class="start-rating">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </div>
+                                   <h5 class="meta">用户2 <span>&mdash; 2015-5-6 14:00</span></h5>
+                                    <p>还可以还可以</p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="comment">
+                            <div class="comment_container">
+                                <img src="http://placehold.it/64x64" class="avatar">
+                                <div class="comment-text">
+                                    <div class="start-rating">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    </div>
+                                    <h5 class="meta">买家 <span>&mdash; 2015-6-1 12:00</span></h5>
+                                    <p>还可以还可以</p>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ol>
+                </div>
+
+
+            </div>
+        </div>
+
+    <hr />
+    </div>
+</section>
+
+<div id="modal_pay">
+    <div id="payment" class="modal fade " role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h2 class="modal-title" id="gridSystemModalLabel">支付订金</h2>
+                </div>
+                <div class="modal-body" style="font-size: 1.5em;">
+                    <div>
+                        账户余额：<span>{{user.balance}}</span>
+                    </div>
+                    <div>
+                        实付金额：<span id="pay_subscription"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="ok" type="button" class="btn btn-info" data-dismiss="modal">确认支付</button>
+                    <button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消支付</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- ========== CONTENT END ========== -->
+{% endblock %}
+
+
+{% block js %}
+<script>
+$(function(){
+    var width = $("#item_pic").width();
+    $("#item_pic").height(width * 1);
+});
+$(function(){
+    $("body").append($("#modal_pay").html());
+    $("#modal_pay").remove();
+});
+
+$(function(){
+    $("#sub").click(function(){
+
+        var sum = parseInt($("#sum").val());
+        if(sum > 0){
+            --sum;
+        }
+        else{
+            sum = 0;
+        }
+
+        $("#sum").val(sum);
+    });
+    $("#add").click(function(){
+        var remail = parseInt($("#remail").html());
+        var sum = parseInt($("#sum").val());
+        if(sum < remail)
+            sum++;
+
+        $("#sum").val(sum);
+    });
+});
+
+
+//倒计时
+$(function(){
+    var start_time_str = $("#start_time").html().replace(/-/ig,'/');
+    var dead_time_str = $("#dead_time").html().replace(/-/ig,'/');
+
+    var start = new Date(start_time_str);
+    var dead = new Date(dead_time_str);
+    var now = new Date();
+    console.log(now);
+    console.log(start);
+    console.log(dead);
+    console.log(dead - now);
+    var intDiff = parseInt((dead - now)/1000);//倒计时总秒数量
+
+    function timer(intDiff){
+        window.setInterval(function(){
+            var day=0,
+                    hour=0,
+                    minute=0,
+                    second=0;//时间默认值
+            if(intDiff > 0){
+                day = Math.floor(intDiff / (60 * 60 * 24));
+                hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+            }
+            if (minute <= 9) minute = '0' + minute;
+            if (second <= 9) second = '0' + second;
+            $('#day_show').html(day+"天");
+            $('#hour_show').html('<s id="h"></s>'+hour+'时');
+            $('#minute_show').html('<s></s>'+minute+'分');
+            $('#second_show').html('<s></s>'+second+'秒');
+            intDiff--;
+        }, 1000);
+    }
+
+    $(function(){
+        timer(intDiff);
+    });
+});
+
+//支付订金
+$(function(){
+    $("#groupbuy_now").click(function(){
+//        var bid = parseFloat($("#bid").val());
+        var cur_sum = parseInt($("#cur_sum").html());
+        var sum = parseInt($("#sum").val());
+        $("#cur_sum").html(cur_sum + sum);
+
+        var subscription = parseFloat($("#subscription").html());
+        alert("ssssssssssssssss");
+        $("#pay_subscription").html((subscription * sum));
+        $("#payment").modal();
+
+        $("#ok").click(function(){
+            var bid = $("#bid").val();
+            $("#cur_price").html(bid);
+        });
+        var buyer_id = $("#user_id").val();
+        var item_auction_id = $("#item_auction_id").val();
+        var url = "/market/item/auction/" + buyer_id + "/" + item_auction_id + "/action/";
+        var data = {"sum":sum, "bid":bid};
+        ajax_get_auction(url, data);
+        return false;
+    });
+});
+
+function ajax_get_auction(url, data){
+//    var data = {'aa':1212};
+    $.get(
+            url,
+            data,
+            function (data, textStatus){
+                location.reload(true);
+            }
+    );
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>淘美人</title>
+
+    <!-- Bootstrap -->
+
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+    <!--<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+    <!--<link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.css" rel="stylesheet">-->
+    <!--<link href="http://cdn.bootcss.com/owl-carousel/1.32/owl.theme.min.css" rel="stylesheet">-->
+    <!--<link href="http://cdn.bootcss.com/owl-carousel/1.3.3/owl.transitions.min.css" rel="stylesheet">-->
+
+    {% load staticfiles %}
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.min.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/owl.carousel.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/owl.theme.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/owl.transitions.css" %}" >
+
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/config.css" %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}" >
+
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+
+    <![endif]-->
+    {% load staticfiles %}
+    <script src="{% static "js/modernizr.custom.63321.js" %}"></script>
+    <!-- <script> </script> -->
+
+
+    {% block css %}
+    {% endblock %}
+
+    <style>
+        /*.modal-backdrop{*/
+        /*z-index: -1040;*/
+        /*}*/
+        /*.modal{*/
+        /*z-index: 1050;*/
+        /*}*/
+        /*#exampleModal{*/
+        /*z-index: 1050;*/
+        /*}*/
+    </style>
+
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+
+    <!-- ========== TOP BAR START ========== -->
+
+    <div id="top-bar">
+        <div class="container">
+
+            <nav id="language-selector">
+                <ul class="nav nav-pills">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.uname }} <b class="caret"></b></a>
+                        <span id="mail" style="display: none;">{{ user.mail }} </span>
+                        <input id="user_id" type="hidden" value="{{user.id}}" />
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="/account/logout/">退出</a></li>
+                            <!--<li><a href="#">Spanish</a></li>-->
+                            <!--<li><a href="#">Italian</a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <nav id="shopping-cart">
+                <a href="#" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
+                    <i class="fa fa-envelope fa-lg"></i> 消息
+                      <span class="fa-stack">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i id="notify_len" class="fa fa-stack-1x fa-inverse">{{notifys.len}}</i>
+                      </span>
+                </a>
+            </nav>
+
+
+
+            <nav id="top-nav" role="navigation" class="navbar">
+                <div class="navbar-header">
+                    <button data-target=".top-nav" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse top-nav" >
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">好友<span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">小组<span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <!--<li><a href="#">German</a></li>-->
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">卖家中心<span class="caret"></span></a>
+                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
+                            <ul role="menu" class="dropdown-menu">
+                                {% if has_store %}
+                                <li><a id="my_store"  href="/store/{{ seller.store.id }}/">我的店</a></li>
+                                {% else %}
+                                <li><a id="apply_store" data-toggle="modal" href="#exampleModal" >申请开店</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<span class="caret"></span></a>
+                            <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">我的账号 <b class="caret"></b></a>-->
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="/order/{{user.id}}/manage/">我的订单</a></li>
+                                <!--<li><a href="#">Spanish</a></li>-->
+                                <!--<li><a href="#">Italian</a></li>-->
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </nav>
+        </div>
+    </div><!-- / #top-bar -->
+
+    <!-- ========== TOP BAR START ========== -->
+
+    <!-- ========== MENU START ========== -->
+
+    <nav id="main-nav">
+        <div class="navbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-nav">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="/index/{{user.id}}"><h1>淘美人</h1></a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                    </div>
+
+                    <!--<div class="row">-->
+                    <div class="col-sm-4">
+                        <div class="navbar-collapse collapse main-nav">
+                            <ul class="nav navbar-nav navbar-right" style="width: 100%;">
+                                <div class="input-group" style="padding-top: 0px;padding-bottom: 0px;line-height: 80px;height: 80px;width: 80%;align-items: flex-end">
+                                    <!--<span style="position: relative">-->
+                                    <div style="line-height: 40px;height: 40px;margin-top: 9%; width: 100%">
+                                        <label class="sr-only" for="search">Email address</label>
+                                        <input type="text" class="form-control" placeholder="搜索..." id="search"  style="width: 100%;">
+                                        <!--</span>-->
+                                        <span class="input-group-btn" >
+                                            <button class="btn btn-default" type="button" >Go!</button>
+                                        </span>
+                                    </div>
+                                </div><!-- /input-group -->
+                            </ul>
+                        </div><!-- /.col-sm-6 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
+<!-- 申请开店 -->
+<div id="modal">
+    <div  class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="apply_store_form" method="post" action="http://127.0.0.1:8000/usercenter/applystore/">
+            {% csrf_token %}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel" >申请开店</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--<form method="post" action="http://127.0.0.1:8000/uercenter/applystore/">-->
+                        <div class="form-group">
+                            <label for="store-name" class="control-label" >店名:</label>
+                            <input type="text" class="form-control" id="store-name" name="store_name" placeholder="您店名,不可重复">
+                        </div>
+                        <div class="form-group">
+                            <label for="store-presentation" class="control-label">店铺描述:</label>
+                            <textarea class="form-control" id="store-presentation" name="store_presentation" placeholder="请简要描述您的店铺"></textarea>
+                        </div>
+                        <!--</form>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" data-dismiss="modal" id="applystore_submit"> <!--onClick="apply_store_form.submit()" -->
+                            确认</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.modal -->
+    <!--</div>&lt;!&ndash; /.bs-example &ndash;&gt;-->
+</div>
+<!-- ========== MENU END ========== -->
+
+
+<!-- ========== CONTENT START ========== -->
+
+{% block content %}
+{% endblock %}
+
+
+<!-- ========== CONTENT END ========== -->
+
+
+
+<!-- ========== FOOTER START ========== -->
+
+<footer id="footer">
+    <div class="container">
+        <hr>
+        <div class="row">
+
+            <div class="col-sm-3 col-sm-offset-1">
+                <aside class="widget widget_nav_menu">
+                    <h3 class="widget-title">淘美人</h3>
+                    <ul>
+                        <li><a href="#">首页</a></li>
+                        <li><a href="#">一口价</a></li>
+                        <li><a href="#">团购</a></li>
+                        <li><a href="#">竞拍</a></li>
+                        <li><a href="#">众筹</a></li>
+                        <li><a href="#">登录/注册</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="col-sm-4">
+                <aside class="widget widget_nav_menu">
+                    <h3 class="widget-title">商品</h3>
+                    <ul>
+                        <li><a href="#">数码电子</a></li>
+                        <li><a href="#">家电</a></li>
+                        <li><a href="#">服装</a></li>
+                        <li><a href="#">生活</a></li>
+                        <li><a href="#">书籍</a></li>
+                        <li><a href="#">其他</a></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="col-sm-3">
+                <aside class="widget widget_newsletter">
+                    <h3 class="widget-title">联系我们</h3>
+                    <form action="#" id="newsletter">
+                        <label for="newsletter-email">给我们发邮件</label>
+                        <div class="input-group">
+                            <input type="text" name="newsletter-email" id="newsletter-email" placeholder="Email" class="form-control input-lg">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-lg" type="button"><i class="fa fa-envelope"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="copyright">
+        <div class="container">&copy; Copyright 淘美人 2015 | All Rights Reserved | Designed by <a href="http://github.com/chenrenzhan/digbueaty">chenrenzhan</a></div>
+    </div>
+
+</footer>
+
+<!-- ========== FOOTER END ========== -->
+
+<div id="cart-panel" class="panel panel-right" >
+    <aside class="widget_shopping_cart">
+        <div style="text-align: center">
+            <h3>消息通知</h3>
+        </div>
+
+        {% ifequal notifys.len 0 %}
+        <div style="text-align: center;">
+            <span>没有新消息</span>
+        </div>
+
+        {% endifequal %}
+
+        <ul class="cart_list">
+            {% for notify in notifys.notify %}
+            <li>
+                <div>
+                    <a href="/order/{{user.id}}/manage/">
+                        <span>{{notify.title}}</span>
+                    </a>
+                </div>
+
+                <span class="quantity">{{notify.text}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </aside>
+</div>
+
+
+
+
+<!--<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>-->
+<!--<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+<!--<script src="http://cdn.bootcss.com/owl-carousel/1.32/owl.carousel.min.js"></script>-->
+<!--<script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>-->
+
+
+
+{% load staticfiles %}
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/owl.carousel.min.js" %}"></script>
+<script src="{% static "js/jquery.cookie.min.js" %}"></script>
+
+<script src="{% static "js/jquery.jpanelmenu.js" %}"></script>
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "js/jquery.enlarge.min.js" %}"></script>
+<script src="{% static "js/uploadPreview.min.js" %}"></script>
+
+
+
+
+
+<script>
+    jQuery(document).ready(function($){
+        var cartPanel = $.jPanelMenu({
+            menu: '#cart-panel',
+            trigger: '#shopping-cart a'
+        });
+
+        cartPanel.on();
+
+    });
+    $("#shopping-cart").click(function(){
+        ajax_get();
+    });
+    function ajax_get(){
+        var user_id = $("#user_id").val();
+        var url = "/notify/" + user_id + "/action/";
+        console.log("ajax_get");
+        $.get(
+                url,
+//                {"has_read":true, "user_id":user_id},
+                function (data, textStatus){
+                    $("#notify_len").html(0);
+                }
+        )
+    }
+
+    $(function(){
+        $("body").append($("#modal").html());
+        $("#modal").remove();
+    });
+
+    $(function(){
+        $("#applystore_submit").click(function(){
+            store_name = $("#store-name").val();
+            store_presentation = $("#store-presentation").val();
+            mail = $("#mail").html();
+//        alert($("#mail"));
+            if(store_name == ""){
+                alert("您必须得填店名!");
+                return false;
+            }
+            else{
+                var information = {"mail":mail, "store_name" : store_name, "store_presentation": store_presentation};
+                ajaxjson(information);
+            }
+        });
+    });
+
+
+    function ajaxjson(information){
+        console.log(information);
+        //django需要带上csrftoken
+        var csrftoken = $.cookie('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        console.log("sasasaaaaaaaaaaaaaaaaaaad")
+        $.ajax({
+            url:"http://127.0.0.1:8000/usercenter/applystore/", //getBaseURL()+"/RequestAjaxPerInfo/",
+            data:{"information":JSON.stringify(information)},
+            async:true,
+            dataType:"json",
+            type:"POST",
+            success:function(result) {
+                console.log(result);
+
+                var is_success = result.is_success;
+                if(is_success){
+                    alert("申请开店成功");
+                    location.reload(true);
+                    return true;
+                }
+                else{
+                    alert("该店铺已经已经被注册,请重新申请");
+                    return false;
+                }
+            }
+
+        });
+    }
+
+</script>
+
+{% block js %}
+{% endblock %}
+
+</body>
+</html>
