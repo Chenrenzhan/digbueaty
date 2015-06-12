@@ -126,3 +126,36 @@ def auction_dead_notify(buyer, auction):
                               gtime=gtime, has_read=has_read)
     except Exception as e:
         print(e)
+
+
+'''团购成功结束通知'''
+def groupbuy_success_notify(buyer,groupbuy):
+    title = u'团购成立通知'
+    text = u'商品 %s 团购时间截止，数量已经达到要求' % (groupbuy.goods.title)
+    #通知对象
+    to = buyer
+    #通知生成时间
+    gtime = datetime.datetime.now()
+    #是否已读
+    has_read = False
+    try:
+        Inform.objects.create(title=title, text=text, to=to,
+                              gtime=gtime, has_read=has_read)
+    except Exception as e:
+        print(e)
+
+'''团购成功结束，参与团购者通知'''
+def groupbuy_success_buyer_notify(buyer,groupbuy):
+    title = u'团购成立通知'
+    text = u'您参与的商品 %s 团购已经截止，数量已经达到要求，请尽快付清尾款' % (groupbuy.goods.title)
+    #通知对象
+    to = buyer
+    #通知生成时间
+    gtime = datetime.datetime.now()
+    #是否已读
+    has_read = False
+    try:
+        Inform.objects.create(title=title, text=text, to=to,
+                              gtime=gtime, has_read=has_read)
+    except Exception as e:
+        print(e)

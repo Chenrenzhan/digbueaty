@@ -13,6 +13,7 @@ from account.models import User, Seller
 from server.action import get_header_inform
 from order.models import Bill, Order, OrderItem
 from notify.action import pay_left_notify, auction_dead_notify,generate_deliver_notify
+from notify.action import  groupbuy_success_notify, groupbuy_success_buyer_notify
 import datetime, time
 
 # Create your views here.
@@ -292,24 +293,24 @@ def item_groupbuy(request, type, item_id):
     return render_to_response('item_groupbuy.html', variable, context_instance=RequestContext(request))
 
 
-def item_groupbuy_auction(request, buyer_id, item_auction_id):
+def item_groupbuy_auction(request, buyer_id, item_groupbuy_id):
     print('item_auction_action')
     sum = int(request.GET['sum'])
-    bid = float(request.GET['bid'])
-
-    auction_item=None
+    #
+    groupbuy_item=None
     buyer=None
     try:
-        auction_item = AuctionItem.objects.get(id=item_auction_id)
-        refund(auction_item)
+        groupbuy_item = GroupBuyingItem.objects.get(id=item_groupbuy_id)
+    #     refund(auction_item)
     except Exception as e:
         print(e)
     try:
         buyer = User.objects.get(id=buyer_id)
     except Exception as e:
         print(e)
-
-    total_amounts = sum * bid
+    groupbuy_item.cur_sum = sum
+    groupbuy_item.save()
+    total_amounts = sum * groupbuy_item.price
     gtime = datetime.datetime.now()
     paytime = datetime.datetime.now()
     has_payed = True
@@ -322,39 +323,30 @@ def item_groupbuy_auction(request, buyer_id, item_auction_id):
     except Exception as e:
         print(e)
 
-    auction_bid=None
+
+    groupbuy_subscript_record=None
     try:
-        auction_bid = AuctionBid.objects.create(buyer=buyer, auction=auction_item,bid=bid, is_succeed=False, sum=sum)
+        groupbuy_subscript_record=GroupBuyingSubscriptionRecord.objects.create(group_buying=groupbuy_item,
+                                 buyer=buyer, number=sum, bill=bill, is_done=False)
     except Exception as e:
         print(e)
-
-    auction_subscript_record=None
-    try:
-        auction_subscript_record=AuctionSubscriptionRecord.objects.create(buyer=buyer,
-                                 bill=bill, is_done=False, auction=auction_item)
-    except Exception as e:
-        print(e)
-
+    #
     buyer.balance -= total_amounts
     buyer.save()
-    auction_item.hightest_price = bid
-    auction_item.save()
+    groupbuy_item.goods.remain -= sum
+    groupbuy_item.save()
 
-
-    print(sum.__class__)
-    print(bid)
 
     return HttpResponse("result")
-    # pass
 
-#竞拍时间截止
-def groupbuy_dead_action(request, buyer_id, item_auction_id):
+#团购时间截止
+def groupbuy_dead_action(request, buyer_id, item_groupbuy_id):
     print('auction_dead_action')
-    auction_item=None
+    groupbuy_item=None
     buyer=None
     try:
-        auction_item = AuctionItem.objects.get(id=item_auction_id)
-        refund(auction_item)
+        groupbuy_item = GroupBuyingItem.objects.get(id=item_groupbuy_id)
+    #     refund(auction_item)
     except Exception as e:
         print(e)
     try:
@@ -362,53 +354,7 @@ def groupbuy_dead_action(request, buyer_id, item_auction_id):
     except Exception as e:
         print(e)
 
-    auction_bid = get_max_abid(auction_item)
-
-    #出价额
-    bid = auction_bid.bid
-    #数量
-    sum = auction_bid.sum
-    #订金
-    subscription = auction_item.subscription
-
-    total = (bid - subscription) * sum
-    gtime = datetime.datetime.now()
-    paytime = datetime.datetime.now()
-    has_payed = False
-    has_return = False
-
-    bill=None
-    try:
-        bill = Bill.objects.create(total_amounts=total, gtime=gtime, paytime=paytime,
-                                   has_payed=has_payed, has_return=has_return)
-    except Exception as e:
-        print(e)
-
-    sell_user=None
-    goods=auction_item.goods
-    seller=None
-    try:
-        seller = Seller.objects.get(store=goods.store)
-        sell_user = seller.user
-    except Exception as e:
-        print(e)
-
-    order=None
-    try:
-        order=Order.objects.create(buy_user=buyer, sell_user=sell_user, store=goods.store,
-                                   bill=bill, gtime=gtime, has_deliver=False, has_confirm=False,
-                                   mail='13631261719@163.com', name='chenrenzhan')
-    except Exception as e:
-        print(e)
-
-    order_item=None
-    try:
-        order_item = OrderItem.objects.create(goods=goods, order=order, number=sum, price=bid)
-    except Exception as e:
-        print(e)
-
-    pay_left_notify(buyer, auction_item)
-    auction_dead_notify(buyer, auction_item)
+    groupbuy_dead(groupbuy_item)
 
     return HttpResponse('result')
 

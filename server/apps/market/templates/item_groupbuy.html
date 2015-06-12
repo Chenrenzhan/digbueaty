@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-sm-7 summary entry-summary">
-
+                <input type="hidden" id="item_groupbuy_id" value="{{groupbuy.id}}" />
                 <h1 class="product_title">{{goods.item.goods.title}}</h1>
 
 
@@ -312,7 +312,10 @@ $(function(){
     var intDiff = parseInt((dead - now)/1000);//倒计时总秒数量
 
     function timer(intDiff){
-        window.setInterval(function(){
+        if(intDiff <= 0){
+                $("#countdown").html("<span>团购结束</span>");
+            }
+        interval=window.setInterval(function(){
             var day=0,
                     hour=0,
                     minute=0,
@@ -329,6 +332,14 @@ $(function(){
             $('#hour_show').html('<s id="h"></s>'+hour+'时');
             $('#minute_show').html('<s></s>'+minute+'分');
             $('#second_show').html('<s></s>'+second+'秒');
+
+            if(intDiff == 0){
+                console.log(interval);
+                clearInterval(interval);
+                $("#countdown").html("<span>团购结束</span>");
+                timedead();
+            }
+
             intDiff--;
         }, 1000);
     }
@@ -344,7 +355,7 @@ $(function(){
 //        var bid = parseFloat($("#bid").val());
         var cur_sum = parseInt($("#cur_sum").html());
         var sum = parseInt($("#sum").val());
-        $("#cur_sum").html(cur_sum + sum);
+
 
         var subscription = parseFloat($("#subscription").html());
         alert("ssssssssssssssss");
@@ -352,24 +363,38 @@ $(function(){
         $("#payment").modal();
 
         $("#ok").click(function(){
-            var bid = $("#bid").val();
-            $("#cur_price").html(bid);
+            $("#cur_sum").html(cur_sum + sum);
+
+            var buyer_id = $("#user_id").val();
+            var item_groupbuy_id = $("#item_groupbuy_id").val();
+            var url = "/market/item/groupbuy/" + buyer_id + "/" + item_groupbuy_id + "/action/";
+            var data = {"sum":sum};
+            ajax_get_groupbuy(url, data);
         });
-        var buyer_id = $("#user_id").val();
-        var item_auction_id = $("#item_auction_id").val();
-        var url = "/market/item/auction/" + buyer_id + "/" + item_auction_id + "/action/";
-        var data = {"sum":sum, "bid":bid};
-        ajax_get_auction(url, data);
+
         return false;
     });
 });
 
-function ajax_get_auction(url, data){
+function ajax_get_groupbuy(url, data){
 //    var data = {'aa':1212};
     $.get(
             url,
             data,
             function (data, textStatus){
+                location.reload(true);
+            }
+    );
+}
+
+function timedead() {
+    var buyer_id = $("#user_id").val();
+    var item_auction_id = $("#item_groupbuy_id").val();
+    var url = "/market/item/groupbuy/" + buyer_id + "/" + item_auction_id + "/dead/action/";
+    $.get(
+            url,
+//            data,
+            function (data, textStatus) {
                 location.reload(true);
             }
     );

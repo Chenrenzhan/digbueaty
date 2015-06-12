@@ -9,7 +9,7 @@ import os
 
 from server.settings import BASE_DIR
 
-MANDRILL_API_KEY = 'uktjp3LCNOzol9ykTNuBDg'
+MANDRILL_API_KEY = 'eHPTmMlVBFpbtrP5zWuolQ'
 class mandrill_sender:
     def __init__(self, _key=MANDRILL_API_KEY):
         self.client = mandrill.Mandrill(_key)

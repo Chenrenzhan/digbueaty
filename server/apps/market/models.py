@@ -161,8 +161,10 @@ class GroupBuyingItem(models.Model):
 
 """团购订金支付记录"""
 class GroupBuyingSubscriptionRecord(BaseSubscriptionRecord):
-    #拍卖商品
+    #团购商品
     group_buying = models.ForeignKey(GroupBuyingItem)
+    # 团购支付者
+    # buyer = models.ForeignKey('account.User')
     #预定数量
     number = models.IntegerField()
     #获取某次团购所有记录

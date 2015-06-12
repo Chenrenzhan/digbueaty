@@ -312,6 +312,9 @@ $(function(){
     var intDiff = parseInt((dead - now)/1000);//倒计时总秒数量
 
     function timer(intDiff){
+        if(intDiff <= 0){
+                $("#countdown").html("<span>竞拍结束</span>");
+            }
 //        intDiff = 10;
         var interval =  window.setInterval(function(){
             var day=0,
